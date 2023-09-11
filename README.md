@@ -50,9 +50,29 @@ New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server' -Enabled True -Dire
 ```
 ### Open Master Server Toolkit related ports
 
+```
 New-NetFirewallRule -DisplayName 'MST Server TCP' -Action Allow -LocalPort 5000 -Protocol TCP
 New-NetFirewallRule -DisplayName 'MST Server UDP' -Action Allow -LocalPort 5000 -Protocol UDP
 New-NetFirewallRule -DisplayName 'MST Room TCP' -Action Allow -LocalPort 7777 -Protocol TCP
 New-NetFirewallRule -DisplayName 'MST Room UDP' -Action Allow -LocalPort 7777 -Protocol UDP
 New-NetFirewallRule -DisplayName 'MST Room Default TCP' -Action Allow -LocalPort 1500 -Protocol TCP
 New-NetFirewallRule -DisplayName 'MST Room Default UDP' -Action Allow -LocalPort 1500 -Protocol UDP
+```
+
+## Deploying To Linux Server
+
+After creating the initial Linux server (tested with Ubuntu 22.04 x64), run the following commands as root...
+
+### Open Master Server Toolkit related ports
+```
+# ufw allow 5000
+# ufw allow 1500
+# ufw allow 7777
+```
+
+### Make the binaries executable after copying them to the server
+
+```
+# chmod +x /UnityProjects/MstDemo1/Builds/App/Nix/MasterAndSpawner/MasterAndSpawner.x86_64
+# chmod +x /UnityProjects/MstDemo1/Builds/App/Nix/Room/Room.x86_64
+```
