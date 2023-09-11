@@ -29,7 +29,7 @@ After creating your server, get the IP address and update the relevant configs. 
 
 ```
 -mstStartClientConnection=True
--mstMasterIp=66.42.125.93
+-mstMasterIp=99.99.999.99
 -mstMasterPort=5000
 -mstRoomIp=99.99.999.99
 -mstRoomPort=7777
