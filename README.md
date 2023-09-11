@@ -1,5 +1,12 @@
 # Master Server Toolkit Demo
 
+## Lobby Implementation Steps (WIP)
+
+1. Add new "Lobbies List" button to MenuView
+1. Create LobbiesListView based on GamesListView
+1. Create CreateNewLobbyView based on CreateNewRoomView
+1. Create LobbyView based on PlayersListView
+
 ## General Server Deployment Notes
 
 After creating your server, get the IP address and update the relevant configs. The following config examples use a fake IP address of 99.99.999.99. You will need to replace this with your own server's IP.
