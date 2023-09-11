@@ -1,5 +1,4 @@
-﻿#if FISHNET
-using MasterServerToolkit.Utils.Editor;
+﻿using MasterServerToolkit.Utils.Editor;
 using System.IO;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
@@ -7,9 +6,9 @@ using UnityEngine;
 
 namespace MasterServerToolkit.MasterServer.Examples.FishNetworking
 {
-    public class AppBuilder
+    public class WinAppBuilder
     {
-        public const string ToolMenu = "Tools/App Builds/";
+        public const string ToolMenu = "Tools/App Builds (Win)/";
 
         [MenuItem(ToolMenu + "Room(Headless)")]
         private static void BuildRoomForWindowsHeadless()
@@ -25,7 +24,7 @@ namespace MasterServerToolkit.MasterServer.Examples.FishNetworking
 
         private static void BuildRoomForWindows(bool isHeadless)
         {
-            string buildFolder = Path.Combine("Builds", "App", "Room");
+            string buildFolder = Path.Combine("Builds", "App", "Win", "Room");
 
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
@@ -70,8 +69,8 @@ namespace MasterServerToolkit.MasterServer.Examples.FishNetworking
         [MenuItem(ToolMenu + "Master Server and Spawner")]
         private static void BuildMasterAndSpawnerForWindows()
         {
-            string buildFolder = Path.Combine("Builds", "App", "MasterAndSpawner");
-            string roomExePath = Path.Combine(Directory.GetCurrentDirectory(), "Builds", "App", "Room", "Room.exe");
+            string buildFolder = Path.Combine("Builds", "App", "Win", "MasterAndSpawner");
+            string roomExePath = Path.Combine(Directory.GetCurrentDirectory(), "Builds", "App", "Win", "Room", "Room.exe");
 
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
@@ -163,7 +162,7 @@ namespace MasterServerToolkit.MasterServer.Examples.FishNetworking
         [MenuItem(ToolMenu + "Client")]
         private static void BuildClientForWindows()
         {
-            string buildFolder = Path.Combine("Builds", "App", "Client");
+            string buildFolder = Path.Combine("Builds", "App", "Win", "Client");
 
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
@@ -200,4 +199,3 @@ namespace MasterServerToolkit.MasterServer.Examples.FishNetworking
         }
     }
 }
-#endif
