@@ -2,11 +2,16 @@
 using MasterServerToolkit.MasterServer;
 using MasterServerToolkit.Networking;
 using MasterServerToolkit.UI;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace Assets.App.Scripts.UI
 {
@@ -23,15 +28,31 @@ namespace Assets.App.Scripts.UI
         [SerializeField]
         private TMP_Text statusInfoText;
 
+        [SerializeField]
+        private UnityEngine.UI.Button startGameButton;
+
+        private static JoinedLobby _lobby;
+
         public UnityEvent OnStartGameEvent;
+        private RoomAccessPacket _currentRoomAccess;
 
         protected override void Awake()
         {
             base.Awake();
 
             // Listen to show/hide events
-            Mst.Events.AddListener(MstEventKeys.showGamesListView, OnShowGamesListEventHandler);
-            Mst.Events.AddListener(MstEventKeys.hideGamesListView, OnHideGamesListEventHandler);
+            Mst.Events.AddListener(AppEventKeys.showLobbyView, OnShowLobbyViewEventHandler);
+            Mst.Events.AddListener(AppEventKeys.hideLobbyView, OnHideLobbyViewEventHandler);
+        }
+
+        protected override void OnDestroy()
+        {
+            // When starting a game we want to unsubscribe from these events to avoid errors getting generated due to null objects.
+            _lobby.OnMemberJoinedEvent -= OnMemberJoined;
+            _lobby.OnMemberLeftEvent -= OnMemberLeft;
+            _lobby.OnMemberReadyStatusChangedEvent -= OnMemberReadyStatusChanged;
+
+            base.OnDestroy();
         }
 
         protected override void Start()
@@ -45,119 +66,106 @@ namespace Assets.App.Scripts.UI
                     Destroy(t.gameObject);
                 }
             }
+
+            if (_lobby != null)
+            {
+                // If we're here then we're probably returning back from a game to the lobby view...
+                ResetLobby();
+                DrawPlayersList();
+            }
         }
 
-        private void OnShowGamesListEventHandler(EventMessage message)
+        private void OnShowLobbyViewEventHandler(EventMessage message)
         {
+            Mst.Events.Invoke(MstEventKeys.hideCreateLobbyView);
+            Mst.Events.Invoke(MstEventKeys.hideLoadingInfo);
+
+            _lobby = message.As<JoinedLobby>();
+            _lobby.OnLobbyStateChangeEvent += OnLobbyStateChange;
+            _lobby.OnLobbyStatusTextChangeEvent += OnLobbyStatusTextChange;
+
+            ResetLobby();
+        }
+
+        private void ResetLobby()
+        {
+            _lobby.OnMemberJoinedEvent += OnMemberJoined;
+            _lobby.OnMemberLeftEvent += OnMemberLeft;
+            _lobby.OnMemberReadyStatusChangedEvent += OnMemberReadyStatusChanged;
+
+            bool isMasterUser = _lobby.IsMasterUser(Mst.Client.Auth.AccountInfo.Username);
+            startGameButton.gameObject.SetActive(isMasterUser);
+
             Show();
         }
 
-        private void OnHideGamesListEventHandler(EventMessage message)
+        private void OnLobbyStatusTextChange(string text)
+        {
+            statusInfoText.text = $"{statusInfoText.text};{text}";
+        }
+
+        private void OnLobbyStateChange(LobbyState state)
+        {
+            //statusInfoText.text = $"{statusInfoText.text}; LobbyState[{state}]";
+            switch (state)
+            {
+                case LobbyState.FailedToStart:
+                    // TODO: Show error message.
+                    Debug.Log("JMH:LobbyState.FailedToStart");
+                    break;
+                case LobbyState.Preparations:
+                    // This is waiting for the game to start (either for the first time or for subsequent times.
+                    Debug.Log("JMH:LobbyState.Preparations");
+
+                    Scene scene = SceneManager.GetActiveScene();
+
+                    // If we're not currently in the Client scene, then we're probably returning from a game/match. So switch it back to the Client scene.
+                    if (!scene.name.Equals("Client", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // When the Client scene loads we have extra logic in Start() to handle re-rendering player list and showing the lobby view...
+                        SceneManager.LoadScene("Client");
+                    }
+
+                    break;
+                case LobbyState.StartingGameServer:
+                    // TODO: Show loading text or something...
+                    Debug.Log("JMH:LobbyState.StartingGameServer");
+                    break;
+                case LobbyState.GameInProgress:
+                    // Put player in room
+                    Debug.Log("JMH:LobbyState.GameInProgress");
+                    _currentRoomAccess = null;
+                    _lobby.GetLobbyRoomAccess((access, error) => 
+                    {
+                        Debug.Log("JMH:_lobby.GetLobbyRoomAccess");
+                        if (!string.IsNullOrWhiteSpace(error))
+                        {
+                            Mst.Events.Invoke(MstEventKeys.showLoadingInfo, $"Get Lobby Room Access error: [{error}]");
+                            return;
+                        }
+
+                        // Not sure what we're supposed to use this for. Maybe logging when runtime errors occur?
+                        _currentRoomAccess = access;
+                    });
+                    break;
+                case LobbyState.GameOver:
+                    // TODO: Figure out how to handle this state, if we even have to...
+                    Debug.Log("JMH:LobbyState.GameOver");
+                    break;
+            }
+        }
+
+        private void OnHideLobbyViewEventHandler(EventMessage message)
         {
             Hide();
         }
 
         protected override void OnShow()
         {
-            FindGames();
+            DrawPlayersList();
         }
 
-        private void DrawGamesList(IEnumerable<GameInfoPacket> games)
-        {
-            if (listContainer)
-            {
-                int index = 0;
-
-                var gameNumberCol = Instantiate(uiColLablePrefab, listContainer, false);
-                gameNumberCol.Text = "#";
-                gameNumberCol.name = "gameNumberCol";
-
-                var gameNameCol = Instantiate(uiColLablePrefab, listContainer, false);
-                gameNameCol.Text = "Name";
-                gameNameCol.name = "gameNameCol";
-
-                var gameAddressCol = Instantiate(uiColLablePrefab, listContainer, false);
-                gameAddressCol.Text = "Address";
-                gameAddressCol.name = "gameAddressCol";
-
-                var gameRegionCol = Instantiate(uiColLablePrefab, listContainer, false);
-                gameRegionCol.Text = "Region";
-                gameRegionCol.name = "gameRegionCol";
-
-                var pingRegionCol = Instantiate(uiColLablePrefab, listContainer, false);
-                pingRegionCol.Text = "Ping";
-                pingRegionCol.name = "pingRegionCol";
-
-                var gamePlayersCol = Instantiate(uiColLablePrefab, listContainer, false);
-                gamePlayersCol.Text = "Players";
-                gamePlayersCol.name = "gamePlayersCol";
-
-                var connectBtnCol = Instantiate(uiColLablePrefab, listContainer, false);
-                connectBtnCol.Text = "Action";
-                connectBtnCol.name = "connectBtnCol";
-
-                foreach (GameInfoPacket gameInfo in games)
-                {
-                    var gameNumberLable = Instantiate(uiLablePrefab, listContainer, false);
-                    gameNumberLable.Text = $"{index + 1}";
-                    gameNumberLable.name = $"gameNumberLable_{index}";
-
-                    var gameNameLable = Instantiate(uiLablePrefab, listContainer, false);
-                    gameNameLable.Text = gameInfo.IsPasswordProtected ? $"{gameInfo.Name} <color=yellow>[Password]</color>" : gameInfo.Name;
-                    gameNameLable.name = $"gameNameLable_{index}";
-
-                    var gameAddressLable = Instantiate(uiLablePrefab, listContainer, false);
-                    gameAddressLable.Text = gameInfo.Address;
-                    gameAddressLable.name = $"gameAddressLable_{index}";
-
-                    var gameRegionLable = Instantiate(uiLablePrefab, listContainer, false);
-                    string region = string.IsNullOrEmpty(gameInfo.Region) ? "International" : gameInfo.Region;
-                    gameRegionLable.Text = region;
-                    gameRegionLable.name = $"gameRegionLable_{index}";
-
-                    var pingRegionLable = Instantiate(uiLablePrefab, listContainer, false);
-                    pingRegionLable.Text = $"...";
-
-                    var rx = new Regex(@":\d+");
-                    string ip = rx.Replace(gameInfo.Address.Trim(), "");
-
-                    MstTimer.WaitPing(ip, (time) =>
-                    {
-                        pingRegionLable.Text = $"{time} ms.";
-                    });
-
-                    pingRegionLable.name = $"pingRegionLable_{index}";
-
-                    var gamePlayersBtn = Instantiate(uiButtonPrefab, listContainer, false);
-                    string maxPleyers = gameInfo.MaxPlayers <= 0 ? "∞" : gameInfo.MaxPlayers.ToString();
-                    gamePlayersBtn.SetLable($"{gameInfo.OnlinePlayers} / {maxPleyers} [Show]");
-                    gamePlayersBtn.name = $"gamePlayersLable_{index}";
-                    gamePlayersBtn.AddOnClickListener(() =>
-                    {
-                        Mst.Events.Invoke(MstEventKeys.showPlayersListView, gameInfo.Id);
-                        Hide();
-                    });
-
-                    var gameConnectBtn = Instantiate(uiButtonPrefab, listContainer, false);
-                    gameConnectBtn.SetLable("Join");
-                    gameConnectBtn.AddOnClickListener(() =>
-                    {
-                        MatchmakingBehaviour.Instance.StartMatch(gameInfo);
-                    });
-                    gameConnectBtn.name = $"gameConnectBtn_{index}";
-
-                    index++;
-
-                    logger.Info(gameInfo);
-                }
-            }
-            else
-            {
-                logger.Error("Not all components are setup");
-            }
-        }
-
-        private void ClearGamesList()
+        private void ClearPlayersList()
         {
             if (listContainer)
             {
@@ -168,42 +176,103 @@ namespace Assets.App.Scripts.UI
             }
         }
 
-        public void ShowCreateNewRoomView()
+        private void DrawPlayersList()
         {
-            Mst.Events.Invoke(MstEventKeys.showCreateNewRoomView);
+            ClearPlayersList();
+
+            if (listContainer)
+            {
+                int index = 0;
+
+                var memberNumberCol = Instantiate(uiColLablePrefab, listContainer, false);
+                memberNumberCol.Text = "#";
+                memberNumberCol.name = "memberNumberCol";
+
+                var memberNameCol = Instantiate(uiColLablePrefab, listContainer, false);
+                memberNameCol.Text = "Player Name";
+                memberNameCol.name = "memberNameCol";
+
+                var memberTeamCol = Instantiate(uiColLablePrefab, listContainer, false);
+                memberTeamCol.Text = "Team";
+                memberTeamCol.name = "memberTeamCol";
+
+                var memberIsReadyCol = Instantiate(uiColLablePrefab, listContainer, false);
+                memberIsReadyCol.Text = "Is Ready";
+                memberIsReadyCol.name = "memberIsReadyCol";
+
+                LobbyMemberData[] members = _lobby.Members.Values.ToArray();
+
+                foreach (LobbyMemberData member in members)
+                {
+                    var memberNumberLable = Instantiate(uiLablePrefab, listContainer, false);
+                    memberNumberLable.Text = $"{index + 1}";
+                    memberNumberLable.name = $"memberNumberLable_{index}";
+
+                    bool isHost = _lobby.IsMasterUser(member.Username);
+                    bool isLocalPlayer = Mst.Client.Auth.AccountInfo.Username.Equals(member.Username, StringComparison.OrdinalIgnoreCase);
+                    var memberNameLable = Instantiate(uiLablePrefab, listContainer, false);
+                    memberNameLable.Text = $"{member.Username}{(isLocalPlayer ? " (You)" : "")}{(isHost ? " (Host)" : "")}";
+                    memberNameLable.name = $"memberNameLable_{index}";
+
+                    var memberTeamLable = Instantiate(uiLablePrefab, listContainer, false);
+                    memberTeamLable.Text = member.Team;
+                    memberTeamLable.name = $"memberTeamLable_{index}";
+
+                    var memberIsReadyLable = Instantiate(uiLablePrefab, listContainer, false);
+                    memberIsReadyLable.Text = member.IsReady.ToString();
+                    memberIsReadyLable.name = $"memberIsReadyLable_{index}";
+
+                    index++;
+
+                    logger.Info(member);
+                }
+            }
+            else
+            {
+                logger.Error("Not all components are setup.");
+            }
         }
 
-        /// <summary>
-        /// Sends request to master server to find games list
-        /// </summary>
-        public void FindGames()
+        public void OnReadyClick()
         {
-            ClearGamesList();
+            _lobby.SetReadyStatus(true);
+        }
 
-            canvasGroup.interactable = false;
+        public void OnUnreadyClick()
+        {
+            _lobby.SetReadyStatus(false);
+        }
 
-            if (statusInfoText)
-            {
-                statusInfoText.text = "Finding rooms... Please wait!";
-                statusInfoText.gameObject.SetActive(true);
-            }
+        public void OnExitClick()
+        {
+            _lobby.Leave();
+        }
 
-            MstTimer.WaitForSeconds(0.2f, () =>
-            {
-                Mst.Client.Matchmaker.FindGames((games) =>
+        public void OnStartGame()
+        {
+            _lobby.StartGame((isSuccessful, error) => 
+            { 
+                if (!isSuccessful)
                 {
-                    canvasGroup.interactable = true;
-
-                    if (games.Count == 0)
-                    {
-                        statusInfoText.text = "No games found! Try to create your own one.";
-                        return;
-                    }
-
-                    statusInfoText.gameObject.SetActive(false);
-                    DrawGamesList(games);
-                });
+                    Debug.LogError($"Lobby Start Game Error: {error}");
+                }
             });
+        }
+
+        private void OnMemberJoined(LobbyMemberData member)
+        {
+            DrawPlayersList();
+        }
+
+        private void OnMemberLeft(LobbyMemberData member)
+        {
+            DrawPlayersList();
+        }
+
+        private void OnMemberReadyStatusChanged(LobbyMemberData member, bool isReady)
+        {
+            DrawPlayersList();
         }
     }
 }
+

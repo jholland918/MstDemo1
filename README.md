@@ -157,14 +157,14 @@
 					}
 					else
 					{
-						Mst.Events.Invoke(MstEventKeys.showLobbyListView, lobby);
+						Mst.Events.Invoke(AppEventKeys.showLobbyView, lobby);
 						return;
 					}
 				});
 			}
 	-Open LobbiesListView and update Join button click handler call from `MatchmakingBehaviour.Instance.StartMatch(gameInfo);` to `MatchmakingBehaviour.Instance.JoinLobby(gameInfo);`
 1. Update LobbyView
-    - to be shown when player joins...
+    -to be shown when player joins...
 	-to list players
 	-to allow players to ready/un-ready
 	-to allow player host to start game

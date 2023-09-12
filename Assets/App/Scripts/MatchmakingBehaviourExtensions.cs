@@ -1,3 +1,4 @@
+using Assets.App.Scripts;
 using MasterServerToolkit.MasterServer;
 using UnityEngine.Events;
 
@@ -75,7 +76,7 @@ namespace MasterServerToolkit.Bridges
                 }
                 else
                 {
-                    Mst.Events.Invoke(MstEventKeys.showLobbyListView, lobby);
+                    Mst.Events.Invoke(AppEventKeys.showLobbyView, lobby);
                     return;
                 }
             });
