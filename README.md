@@ -126,7 +126,7 @@
 						//    failCallback?.Invoke();
 						//}));
 
-						Mst.Events.Invoke(MstEventKeys.showLobbyListView, lobby);
+						Mst.Events.Invoke(AppEventKeys.showLobbyView, lobby);
 
 						return;
 					}
@@ -164,11 +164,36 @@
 			}
 	-Open LobbiesListView and update Join button click handler call from `MatchmakingBehaviour.Instance.StartMatch(gameInfo);` to `MatchmakingBehaviour.Instance.JoinLobby(gameInfo);`
 1. Update LobbyView
-    -to be shown when player joins...
-	-to list players
-	-to allow players to ready/un-ready
-	-to allow player host to start game
-
+    -update table
+	--go to LobbyView > panel > container > Scroll View > Viewport > Content > * and edit table columns and rows to be the following:
+	---Row 1: [#][Player name][Team][Is Ready]
+	----Update labels on the first objects and delete #4,5,6
+	---Row 2: [1][Demo player][A   ][True    ]
+	----Update labels, then delete buttons
+	---Update LobbyView > panel > container > Scroll View > Viewport > Content
+	----Data Table Layout Group Component > Cols Info Widths: 50,0,250,250
+    -add Start Game button
+	--duplicated from "Cancel" button
+	--rename gameobject to "startGameButton"
+	--move above "Cancel" button
+	--Update label to "Start Game"
+	--update onclick reference to LobbyView gameobject > OnStartGame()
+	--update "LobbyView" gameobject "Start Game Button" reference to map to "startGameButton" gameobject
+	-Rename "updateButton" to "readyButton"
+	--Change label to "Ready"
+	--Change OnClick handler to LobbyView.OnReadyClick()
+	-Rename "createNewGameButton" to "unreadyButton"
+	--Change label to "Un-Ready"
+	--Change OnClick handler to LobbyView.OnUnreadyClick()
+	--Remove additional, unused click handler
+1. Add MatchTimer script
+	-Create MatchTimer.cs script in App/Lobbies/Scripts...
+	-Attach MatchTimer
+	--Open Scene:Room 
+	--Unpack --ROOM_SERVER gameobject
+	--Attach MatchTimer to --ROOM_SERVER gameobject
+ 
+	
 ## General Server Deployment Notes
 
 After creating your server, get the IP address and update the relevant configs. The following config examples use a fake IP address of 99.99.999.99. You will need to replace this with your own server's IP.

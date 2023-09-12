@@ -56,7 +56,7 @@ namespace MasterServerToolkit.Bridges
                     //    failCallback?.Invoke();
                     //}));
 
-                    Mst.Events.Invoke(MstEventKeys.showLobbyListView, lobby);
+                    Mst.Events.Invoke(AppEventKeys.showLobbyView, lobby);
 
                     return;
                 }
