@@ -1,10 +1,11 @@
+using MasterServerToolkit.MasterServer;
 using MasterServerToolkit.Utils.Editor;
 using System.IO;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
-namespace MasterServerToolkit.MasterServer.Examples.FishNetworking
+namespace Assets.App.Editor
 {
     public class NixAppBuilder
     {
@@ -57,7 +58,7 @@ namespace MasterServerToolkit.MasterServer.Examples.FishNetworking
 
                 File.WriteAllText(appConfig, properties.ToReadableString("\n", "="));
 
-                Debug.Log("Room build succeeded: " + (summary.totalSize / 1024) + " kb");
+                Debug.Log("Room build succeeded: " + summary.totalSize / 1024 + " kb");
             }
 
             if (summary.result == BuildResult.Failed)
@@ -105,7 +106,7 @@ namespace MasterServerToolkit.MasterServer.Examples.FishNetworking
 
                 File.WriteAllText(Path.Combine(buildFolder, "application.cfg"), properties.ToReadableString("\n", "="));
 
-                Debug.Log("Master Server build succeeded: " + (summary.totalSize / 1024) + " kb");
+                Debug.Log("Master Server build succeeded: " + summary.totalSize / 1024 + " kb");
             }
 
             if (summary.result == BuildResult.Failed)
@@ -156,7 +157,7 @@ namespace MasterServerToolkit.MasterServer.Examples.FishNetworking
 
                 File.WriteAllText(appConfig, properties.ToReadableString("\n", "="));
 
-                Debug.Log("Spawner build succeeded: " + (summary.totalSize / 1024) + " kb");
+                Debug.Log("Spawner build succeeded: " + summary.totalSize / 1024 + " kb");
             }
 
             if (summary.result == BuildResult.Failed)
@@ -195,7 +196,7 @@ namespace MasterServerToolkit.MasterServer.Examples.FishNetworking
 
                 File.WriteAllText(appConfig, properties.ToReadableString("\n", "="));
 
-                Debug.Log("Client build succeeded: " + (summary.totalSize / 1024) + " kb");
+                Debug.Log("Client build succeeded: " + summary.totalSize / 1024 + " kb");
             }
 
             if (summary.result == BuildResult.Failed)

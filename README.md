@@ -2,10 +2,149 @@
 
 ## Lobby Implementation Steps (WIP)
 
-1. Add new "Lobbies List" button to MenuView
 1. Create LobbiesListView based on GamesListView
+	-copy script contents to new LobbiesListView script
+	-add to game object
+	-add same references as original script
+	-remove GamesListView from gameobject
+	-reposition lobbieslistview in scene editor so it doesn't overlap the gameslistview
 1. Create CreateNewLobbyView based on CreateNewRoomView
+	-duplicate CreateNewRoomView
+	-unpack newly created object
+	-rename to CreateNewLobbyView
+	-create new script "CreateNewLobbyView" with contents of "CreateNewRoomView" script
+	-update namespace
+	-attach to gameobject
+	-update references like original script
+	-remove original script CreateNewRoomView
+	-reposition new view in scene editor so it doesn't overlap the original view it was copied from
 1. Create LobbyView based on PlayersListView
+	-duplicate PlayersListView
+	-unpack newly created object
+	-rename to LobbyView
+	-create new script "LobbyView" with contents of "PlayersListView" script
+	-update namespace
+	-attach to gameobject
+	-update references like original script
+	-remove original script PlayersListView
+	-reposition new view in scene editor so it doesn't overlap the original view it was copied from
+1. Add new "Lobbies List" button to MenuView
+	-previous notes...
+	-Attach event handler to LobbiesList button click event to LobbiesListView.Show
+1. Build master, client, room and run master/spawner. Then test client in editor to ensure Menu > Lobbies List button works
+1. Update LobbiesListView to open CreateNewLobbyView
+	-Update "Create New Game" button to "Create New Lobby"
+	-Rename method LobbiesListView.ShowCreateNewRoomView to LobbiesListView.ShowCreateNewLobbyView
+	--fix invoke to call "showCreateLobbyView"
+	-Fix On Click handlers to reference root "LobbiesListView" gameobject
+	-Update each handler to call correct methods: LobbiesListView.ShowCreateNewLobbyView & LobbiesListView.Hide
+	-Update CreateNewLobbyView to listen for "MstEventKeys.showCreateLobbyView"
+	-Test the button to see if it shows the create lobby dialog box...
+1. Update CreateNewLobbyView to actually create a new lobby
+	-add new Game Type Dropdown
+	--right-click "container" gameobject > UI > Dropdown - TextMeshPro naming it "gameTypeInputDropdown"
+	--Add "Survival" into Dropdown Options (replacing "Option A")
+	--Add "OneVsOne" into Dropdown Options (replacing "Option B")
+	--Add "TwoVsTwo" into Dropdown Options (replacing "Option C")
+	--move the dropdown just above "roomMaxConnectionsInputField"
+	--add "Layout Element" to Dropdown gameobject...
+	---add Min Height: checked: 45
+	---add Preferred Height: checked: 45
+	-remove "roomMaxConnectionsInputField" gameobject
+	-update script to remove/replace roomMaxConnectionsInputField fields with gameTypeInputDropdown fields...
+	-replace "CreateNewMatch()" logic with the one below:
+			public void CreateNewMatch()
+			{
+				Mst.Events.Invoke(MstEventKeys.showLoadingInfo, "Starting lobby... Please wait!");
+
+				Logs.Debug("Starting lobby... Please wait!");
+
+				Regex roomNameRe = new Regex(@"\s+");
+
+				var options = new MstProperties();
+				options.Add(Mst.Args.Names.RoomName, roomNameRe.Replace(RoomName, "_"));
+				options.Add(Mst.Args.Names.LobbyId, GameType); //jmh//not sure if this is correct
+
+				if (!string.IsNullOrEmpty(Password))
+					options.Add(Mst.Args.Names.RoomPassword, Password);
+
+				MatchmakingBehaviour.Instance.CreateNewLobby(GameType, options, () =>
+				{
+					Show();
+				});
+			}
+	-Create a "MatchmakingBehaviourExtensions" class to implement MatchmakingBehaviour.Instance.CreateNewLobby() and use namespace MasterServerToolkit.Bridges
+			/// <summary>
+			/// Sends request to master server to start new lobby
+			/// </summary>
+			/// <param name="spawnOptions"></param>
+			public static void CreateNewLobby(this MatchmakingBehaviour mmb, string factory, MstProperties spawnOptions, UnityAction failCallback = null)
+			{
+				// Note: This was copied from CreateNewRoom() and converted for lobby creation, so it's a WIP.
+				Mst.Events.Invoke(MstEventKeys.showLoadingInfo, "Starting lobby... Please wait!");
+
+				// Can't call mmb.logger from MatchmakingBehaviour because it's protected...
+				//mmb.logger.Debug("Starting lobby... Please wait!");
+				var logger = Mst.Create.Logger(nameof(MatchmakingBehaviourExtensions));
+				logger.Debug("Starting lobby... Please wait!");
+
+				// Custom options that will be given to room directly
+				var options = new MstProperties();
+				options.Add(Mst.Args.Names.StartClientConnection, true);
+
+				Mst.Client.Lobbies.CreateAndJoin(factory, options, (lobby, error) =>
+				{
+					if (!string.IsNullOrWhiteSpace(error))
+					{
+						Mst.Events.Invoke(MstEventKeys.showOkDialogBox, new OkDialogBoxEventMessage($"Create New Lobby failed: {error}", () =>
+						{
+							failCallback?.Invoke();
+						}));
+
+						return;
+					}
+					else
+					{
+						// TODO: Assuming this means it worked, write code to use the working lobby.
+
+						// Also, look at MstDictKeys and how to use them:
+						/*
+							 public struct MstDictKeys
+							{
+								public const string ROOM_ID = "-roomId";
+								public const string LOBBY_FACTORY_ID = "-lobbyFactory";
+								public const string LOBBY_NAME = "-lobbyName";
+								public const string LOBBY_PASSWORD = "-lobbyPassword";
+								public const string LOBBY_TEAM = "-lobbyTeam";
+						...
+						 */
+
+						//Mst.Events.Invoke(MstEventKeys.showOkDialogBox, new OkDialogBoxEventMessage("Creating a lobby worked!", () =>
+						//{
+						//    failCallback?.Invoke();
+						//}));
+
+						Mst.Events.Invoke(MstEventKeys.showLobbyListView, lobby);
+
+						return;
+					}
+				});
+			}
+	- Update "Start room" button 
+	--Update lable to read "Start Lobby" 
+	--Fix OnClick handler reference to CreateNewLobbyView.CreateNewMatch()
+	--Rename button gameobject to "startLobbyUIButton"
+1. Add Game Types..
+	- Create "Lobbies" folder under App/Scripts...
+	- Copy the Lobby factories and the module from other sources...
+	- Attach LobbyFactoriesModule script to the `Scene:Master//--MASTER_SERVER/SpawnersModule` gameobject so it can register the gametypes...
+1. Rebuild binaries and test creating lobby...
+...
+1. Update LobbiesListView to list and join lobbies
+1. Update LobbyView
+	-to list players
+	-to allow players to ready/un-ready
+	-to allow player host to start game
 
 ## General Server Deployment Notes
 
