@@ -66,7 +66,7 @@ namespace MasterServerToolkit.Bridges
         public static void JoinLobby(this MatchmakingBehaviour mmb, GameInfoPacket gameInfo)
         {
             var options = new MstProperties();
-            options.Add(Mst.Args.Names.LobbyId, gameInfo.Id); //jmh//not sure if this is correct
+            options.Add(Mst.Args.Names.LobbyId, gameInfo.Id); // I'm not sure if this is correct. -Jason
 
             Mst.Client.Lobbies.JoinLobby(gameInfo.Id, (lobby, error) =>
             {

@@ -111,11 +111,11 @@ namespace Assets.App.Scripts.UI
             {
                 case LobbyState.FailedToStart:
                     // TODO: Show error message.
-                    Debug.Log("JMH:LobbyState.FailedToStart");
+                    Debug.Log("LobbyView:OnLobbyStateChange:FailedToStart");
                     break;
                 case LobbyState.Preparations:
                     // This is waiting for the game to start (either for the first time or for subsequent times.
-                    Debug.Log("JMH:LobbyState.Preparations");
+                    Debug.Log("LobbyView:OnLobbyStateChange:Preparations");
 
                     Scene scene = SceneManager.GetActiveScene();
 
@@ -129,11 +129,11 @@ namespace Assets.App.Scripts.UI
                     break;
                 case LobbyState.StartingGameServer:
                     // TODO: Show loading text or something...
-                    Debug.Log("JMH:LobbyState.StartingGameServer");
+                    Debug.Log("LobbyView:OnLobbyStateChange:StartingGameServer");
                     break;
                 case LobbyState.GameInProgress:
                     // Put player in room
-                    Debug.Log("JMH:LobbyState.GameInProgress");
+                    Debug.Log("LobbyView:OnLobbyStateChange:GameInProgress");
                     _currentRoomAccess = null;
                     _lobby.GetLobbyRoomAccess((access, error) => 
                     {
@@ -150,7 +150,7 @@ namespace Assets.App.Scripts.UI
                     break;
                 case LobbyState.GameOver:
                     // TODO: Figure out how to handle this state, if we even have to...
-                    Debug.Log("JMH:LobbyState.GameOver");
+                    Debug.Log("LobbyView:OnLobbyStateChange:GameOver");
                     break;
             }
         }

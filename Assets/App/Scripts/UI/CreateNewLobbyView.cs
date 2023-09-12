@@ -114,7 +114,7 @@ namespace Assets.App.Scripts.UI
 
             var options = new MstProperties();
             options.Add(Mst.Args.Names.RoomName, roomNameRe.Replace(RoomName, "_"));
-            options.Add(Mst.Args.Names.LobbyId, GameType); //jmh//not sure if this is correct
+            options.Add(Mst.Args.Names.LobbyId, GameType); // I'm not sure if this is correct. -Jason
 
             if (!string.IsNullOrEmpty(Password))
                 options.Add(Mst.Args.Names.RoomPassword, Password);

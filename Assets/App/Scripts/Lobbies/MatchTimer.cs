@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Assets.App.Scripts.Lobbies
 {
+    /// <summary>
+    /// Controls the time limit for a game match and stops the game when time is up.
+    /// </summary>
     public class MatchTimer : MonoBehaviour
     {
         private RoomServerManager _roomManager;
@@ -11,15 +14,14 @@ namespace Assets.App.Scripts.Lobbies
 
         private void Awake()
         {
-            Debug.Log("JMH:001");
+            Debug.Log("MatchTimer:Awake");
             _roomManager = GetComponent<RoomServerManager>();
             _roomManager.OnRoomRegisteredEvent.AddListener(OnRoomRegistered);
         }
 
-        // Start is called before the first frame update
         void Start()
         {
-            Debug.Log("JMH:002");
+            Debug.Log("MatchTimer:Start");
             StartCoroutine("Countdown", 10);
         }
 
@@ -28,23 +30,17 @@ namespace Assets.App.Scripts.Lobbies
             while (time > 0)
             {
                 time--;
-                Debug.Log($"JMH:006:Countdown:{time}");
+                Debug.Log($"MatchTimer:Countdown:{time}");
                 yield return new WaitForSeconds(1);
             }
-            Debug.Log("Countdown Complete!");
+            Debug.Log("MatchTimer:Countdown Complete!");
             _roomController.Destroy();
         }
 
         private void OnRoomRegistered(RoomController roomController)
         {
-            Debug.Log("JMH:003");
+            Debug.Log("MatchTimer:OnRoomRegistered");
             _roomController = roomController;
         }
-
-        // Update is called once per frame
-        void Update()
-        {
-        }
     }
-
 }
