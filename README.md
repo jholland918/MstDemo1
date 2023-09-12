@@ -141,9 +141,30 @@
 	- Copy the Lobby factories and the module from other sources...
 	- Attach LobbyFactoriesModule script to the `Scene:Master//--MASTER_SERVER/SpawnersModule` gameobject so it can register the gametypes...
 1. Rebuild binaries and test creating lobby, it should just be displaying "creating lobby..." at this point..
-...
+===
 1. Update LobbiesListView to list and join lobbies
+	- Add JoinLobby method to MatchmakingBehaviourExtensions:
+			public static void JoinLobby(this MatchmakingBehaviour mmb, GameInfoPacket gameInfo)
+			{
+				var options = new MstProperties();
+				options.Add(Mst.Args.Names.LobbyId, gameInfo.Id); //jmh//not sure if this is correct
+
+				Mst.Client.Lobbies.JoinLobby(gameInfo.Id, (lobby, error) =>
+				{
+					if (!string.IsNullOrWhiteSpace(error))
+					{
+						Mst.Events.Invoke(MstEventKeys.showLoadingInfo, $"Join lobby error: [{error}]");
+					}
+					else
+					{
+						Mst.Events.Invoke(MstEventKeys.showLobbyListView, lobby);
+						return;
+					}
+				});
+			}
+	- Open LobbiesListView and update Join button click handler call from `MatchmakingBehaviour.Instance.StartMatch(gameInfo);` to `MatchmakingBehaviour.Instance.JoinLobby(gameInfo);`
 1. Update LobbyView
+    - to be shown when player joins...
 	-to list players
 	-to allow players to ready/un-ready
 	-to allow player host to start game

@@ -61,6 +61,25 @@ namespace MasterServerToolkit.Bridges
                 }
             });
         }
+
+        public static void JoinLobby(this MatchmakingBehaviour mmb, GameInfoPacket gameInfo)
+        {
+            var options = new MstProperties();
+            options.Add(Mst.Args.Names.LobbyId, gameInfo.Id); //jmh//not sure if this is correct
+
+            Mst.Client.Lobbies.JoinLobby(gameInfo.Id, (lobby, error) =>
+            {
+                if (!string.IsNullOrWhiteSpace(error))
+                {
+                    Mst.Events.Invoke(MstEventKeys.showLoadingInfo, $"Join lobby error: [{error}]");
+                }
+                else
+                {
+                    Mst.Events.Invoke(MstEventKeys.showLobbyListView, lobby);
+                    return;
+                }
+            });
+        }
     }
 
 }

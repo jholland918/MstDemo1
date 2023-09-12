@@ -142,7 +142,7 @@ namespace Assets.App.Scripts.UI
                     gameConnectBtn.SetLable("Join");
                     gameConnectBtn.AddOnClickListener(() =>
                     {
-                        MatchmakingBehaviour.Instance.StartMatch(gameInfo);
+                        MatchmakingBehaviour.Instance.JoinLobby(gameInfo);
                     });
                     gameConnectBtn.name = $"gameConnectBtn_{index}";
 
