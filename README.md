@@ -18,15 +18,15 @@
 	-update references like original script
 	-remove original script CreateNewRoomView
 	-reposition new view in scene editor so it doesn't overlap the original view it was copied from
-1. Create LobbyView based on PlayersListView
-	-duplicate PlayersListView
+1. Create LobbyView based on GamesListView
+	-duplicate GamesListView
 	-unpack newly created object
 	-rename to LobbyView
-	-create new script "LobbyView" with contents of "PlayersListView" script
+	-create new script "LobbyView" with contents of "GamesListView" script
 	-update namespace
 	-attach to gameobject
 	-update references like original script
-	-remove original script PlayersListView
+	-remove original script GamesListView
 	-reposition new view in scene editor so it doesn't overlap the original view it was copied from
 1. Add new "Lobbies List" button to MenuView
 	-previous notes...
@@ -162,7 +162,7 @@
 					}
 				});
 			}
-	- Open LobbiesListView and update Join button click handler call from `MatchmakingBehaviour.Instance.StartMatch(gameInfo);` to `MatchmakingBehaviour.Instance.JoinLobby(gameInfo);`
+	-Open LobbiesListView and update Join button click handler call from `MatchmakingBehaviour.Instance.StartMatch(gameInfo);` to `MatchmakingBehaviour.Instance.JoinLobby(gameInfo);`
 1. Update LobbyView
     - to be shown when player joins...
 	-to list players

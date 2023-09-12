@@ -1,32 +1,37 @@
+﻿using MasterServerToolkit.Bridges;
 using MasterServerToolkit.MasterServer;
+using MasterServerToolkit.Networking;
 using MasterServerToolkit.UI;
-using System.Linq;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.App.Scripts.UI
 {
     public class LobbyView : UIView
     {
-        #region INSPECTOR
-
         [Header("Components"), SerializeField]
         private UILable uiLablePrefab;
         [SerializeField]
         private UILable uiColLablePrefab;
         [SerializeField]
+        private UIButton uiButtonPrefab;
+        [SerializeField]
         private RectTransform listContainer;
+        [SerializeField]
+        private TMP_Text statusInfoText;
 
-        #endregion
-
-        private int roomId = -1;
+        public UnityEvent OnStartGameEvent;
 
         protected override void Awake()
         {
             base.Awake();
 
             // Listen to show/hide events
-            Mst.Events.AddListener(MstEventKeys.showPlayersListView, OnShowPlayersListEventHandler);
-            Mst.Events.AddListener(MstEventKeys.hidePlayersListView, OnHidePlayersListEventHandler);
+            Mst.Events.AddListener(MstEventKeys.showGamesListView, OnShowGamesListEventHandler);
+            Mst.Events.AddListener(MstEventKeys.hideGamesListView, OnHideGamesListEventHandler);
         }
 
         protected override void Start()
@@ -42,77 +47,108 @@ namespace Assets.App.Scripts.UI
             }
         }
 
-        private void OnShowPlayersListEventHandler(EventMessage message)
+        private void OnShowGamesListEventHandler(EventMessage message)
         {
-            roomId = message.AsInt();
             Show();
         }
 
-        private void OnHidePlayersListEventHandler(EventMessage message)
+        private void OnHideGamesListEventHandler(EventMessage message)
         {
-            roomId = -1;
             Hide();
         }
 
         protected override void OnShow()
         {
-            FindPlayers();
+            FindGames();
         }
 
-        /// <summary>
-        /// Sends request to master server to find games list
-        /// </summary>
-        public void FindPlayers()
-        {
-            ClearPlayersList();
-            canvasGroup.interactable = false;
-
-            // if we have room access
-            if (roomId < 0 && Mst.Client.Rooms.HasAccess)
-            {
-                roomId = Mst.Client.Rooms.ReceivedAccess.RoomId;
-            }
-
-            var filter = new MstProperties();
-            filter.Set(MstDictKeys.ROOM_ID, roomId);
-
-            Mst.Client.Matchmaker.FindGames(filter, (games) =>
-            {
-                canvasGroup.interactable = true;
-
-                if (games.Count > 0)
-                {
-                    GameInfoPacket game = games.First();
-                    DrawPlayersList(game);
-                }
-            });
-        }
-
-        private void DrawPlayersList(GameInfoPacket game)
+        private void DrawGamesList(IEnumerable<GameInfoPacket> games)
         {
             if (listContainer)
             {
                 int index = 0;
 
-                var playerIndoexCol = Instantiate(uiColLablePrefab, listContainer, false);
-                playerIndoexCol.Text = "#";
+                var gameNumberCol = Instantiate(uiColLablePrefab, listContainer, false);
+                gameNumberCol.Text = "#";
+                gameNumberCol.name = "gameNumberCol";
 
-                var playerNameCol = Instantiate(uiColLablePrefab, listContainer, false);
-                playerNameCol.Text = "Name";
+                var gameNameCol = Instantiate(uiColLablePrefab, listContainer, false);
+                gameNameCol.Text = "Name";
+                gameNameCol.name = "gameNameCol";
 
-                foreach (string player in game.OnlinePlayersList)
+                var gameAddressCol = Instantiate(uiColLablePrefab, listContainer, false);
+                gameAddressCol.Text = "Address";
+                gameAddressCol.name = "gameAddressCol";
+
+                var gameRegionCol = Instantiate(uiColLablePrefab, listContainer, false);
+                gameRegionCol.Text = "Region";
+                gameRegionCol.name = "gameRegionCol";
+
+                var pingRegionCol = Instantiate(uiColLablePrefab, listContainer, false);
+                pingRegionCol.Text = "Ping";
+                pingRegionCol.name = "pingRegionCol";
+
+                var gamePlayersCol = Instantiate(uiColLablePrefab, listContainer, false);
+                gamePlayersCol.Text = "Players";
+                gamePlayersCol.name = "gamePlayersCol";
+
+                var connectBtnCol = Instantiate(uiColLablePrefab, listContainer, false);
+                connectBtnCol.Text = "Action";
+                connectBtnCol.name = "connectBtnCol";
+
+                foreach (GameInfoPacket gameInfo in games)
                 {
-                    bool isMasterUser = game.Properties.AsString("-room.masterUser") == player;
+                    var gameNumberLable = Instantiate(uiLablePrefab, listContainer, false);
+                    gameNumberLable.Text = $"{index + 1}";
+                    gameNumberLable.name = $"gameNumberLable_{index}";
 
-                    var playerIndoexLable = Instantiate(uiLablePrefab, listContainer, false);
-                    playerIndoexLable.Text = (index + 1).ToString();
-                    playerIndoexLable.name = $"playerIndoexLable_{index}";
+                    var gameNameLable = Instantiate(uiLablePrefab, listContainer, false);
+                    gameNameLable.Text = gameInfo.IsPasswordProtected ? $"{gameInfo.Name} <color=yellow>[Password]</color>" : gameInfo.Name;
+                    gameNameLable.name = $"gameNameLable_{index}";
 
-                    var playerNameLable = Instantiate(uiLablePrefab, listContainer, false);
-                    playerNameLable.Text = $"{player} {(isMasterUser ? ":)" : "")}";
-                    playerNameLable.name = $"playerNameLable_{index}";
+                    var gameAddressLable = Instantiate(uiLablePrefab, listContainer, false);
+                    gameAddressLable.Text = gameInfo.Address;
+                    gameAddressLable.name = $"gameAddressLable_{index}";
+
+                    var gameRegionLable = Instantiate(uiLablePrefab, listContainer, false);
+                    string region = string.IsNullOrEmpty(gameInfo.Region) ? "International" : gameInfo.Region;
+                    gameRegionLable.Text = region;
+                    gameRegionLable.name = $"gameRegionLable_{index}";
+
+                    var pingRegionLable = Instantiate(uiLablePrefab, listContainer, false);
+                    pingRegionLable.Text = $"...";
+
+                    var rx = new Regex(@":\d+");
+                    string ip = rx.Replace(gameInfo.Address.Trim(), "");
+
+                    MstTimer.WaitPing(ip, (time) =>
+                    {
+                        pingRegionLable.Text = $"{time} ms.";
+                    });
+
+                    pingRegionLable.name = $"pingRegionLable_{index}";
+
+                    var gamePlayersBtn = Instantiate(uiButtonPrefab, listContainer, false);
+                    string maxPleyers = gameInfo.MaxPlayers <= 0 ? "∞" : gameInfo.MaxPlayers.ToString();
+                    gamePlayersBtn.SetLable($"{gameInfo.OnlinePlayers} / {maxPleyers} [Show]");
+                    gamePlayersBtn.name = $"gamePlayersLable_{index}";
+                    gamePlayersBtn.AddOnClickListener(() =>
+                    {
+                        Mst.Events.Invoke(MstEventKeys.showPlayersListView, gameInfo.Id);
+                        Hide();
+                    });
+
+                    var gameConnectBtn = Instantiate(uiButtonPrefab, listContainer, false);
+                    gameConnectBtn.SetLable("Join");
+                    gameConnectBtn.AddOnClickListener(() =>
+                    {
+                        MatchmakingBehaviour.Instance.StartMatch(gameInfo);
+                    });
+                    gameConnectBtn.name = $"gameConnectBtn_{index}";
 
                     index++;
+
+                    logger.Info(gameInfo);
                 }
             }
             else
@@ -121,7 +157,7 @@ namespace Assets.App.Scripts.UI
             }
         }
 
-        private void ClearPlayersList()
+        private void ClearGamesList()
         {
             if (listContainer)
             {
@@ -130,6 +166,44 @@ namespace Assets.App.Scripts.UI
                     Destroy(tr.gameObject);
                 }
             }
+        }
+
+        public void ShowCreateNewRoomView()
+        {
+            Mst.Events.Invoke(MstEventKeys.showCreateNewRoomView);
+        }
+
+        /// <summary>
+        /// Sends request to master server to find games list
+        /// </summary>
+        public void FindGames()
+        {
+            ClearGamesList();
+
+            canvasGroup.interactable = false;
+
+            if (statusInfoText)
+            {
+                statusInfoText.text = "Finding rooms... Please wait!";
+                statusInfoText.gameObject.SetActive(true);
+            }
+
+            MstTimer.WaitForSeconds(0.2f, () =>
+            {
+                Mst.Client.Matchmaker.FindGames((games) =>
+                {
+                    canvasGroup.interactable = true;
+
+                    if (games.Count == 0)
+                    {
+                        statusInfoText.text = "No games found! Try to create your own one.";
+                        return;
+                    }
+
+                    statusInfoText.gameObject.SetActive(false);
+                    DrawGamesList(games);
+                });
+            });
         }
     }
 }
