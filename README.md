@@ -2,59 +2,60 @@
 
 ## Lobby Implementation Steps (WIP)
 
-1. Create LobbiesListView based on GamesListView
-	-copy script contents to new LobbiesListView script
-	-add to game object
-	-add same references as original script
-	-remove GamesListView from gameobject
-	-reposition lobbieslistview in scene editor so it doesn't overlap the gameslistview
-1. Create CreateNewLobbyView based on CreateNewRoomView
-	-duplicate CreateNewRoomView
-	-unpack newly created object
-	-rename to CreateNewLobbyView
-	-create new script "CreateNewLobbyView" with contents of "CreateNewRoomView" script
-	-update namespace
-	-attach to gameobject
-	-update references like original script
-	-remove original script CreateNewRoomView
-	-reposition new view in scene editor so it doesn't overlap the original view it was copied from
-1. Create LobbyView based on GamesListView
-	-duplicate GamesListView
-	-unpack newly created object
-	-rename to LobbyView
-	-create new script "LobbyView" with contents of "GamesListView" script
-	-update namespace
-	-attach to gameobject
-	-update references like original script
-	-remove original script GamesListView
-	-reposition new view in scene editor so it doesn't overlap the original view it was copied from
-1. Add new "Lobbies List" button to MenuView
-	-previous notes...
-	-Attach event handler to LobbiesList button click event to LobbiesListView.Show
-1. Build master, client, room and run master/spawner. Then test client in editor to ensure Menu > Lobbies List button works
-1. Update LobbiesListView to open CreateNewLobbyView
-	-Update "Create New Game" button to "Create New Lobby"
-	-Rename method LobbiesListView.ShowCreateNewRoomView to LobbiesListView.ShowCreateNewLobbyView
-	--fix invoke to call "showCreateLobbyView"
-	-Fix On Click handlers to reference root "LobbiesListView" gameobject
-	-Update each handler to call correct methods: LobbiesListView.ShowCreateNewLobbyView & LobbiesListView.Hide
-	-Update CreateNewLobbyView to listen for "MstEventKeys.showCreateLobbyView"
-	-Test the button to see if it shows the create lobby dialog box...
-1. Update CreateNewLobbyView to actually create a new lobby
-	-add new Game Type Dropdown
-	--right-click "container" gameobject > UI > Dropdown - TextMeshPro naming it "gameTypeInputDropdown"
-	--Add "Survival" into Dropdown Options (replacing "Option A")
-	--Add "OneVsOne" into Dropdown Options (replacing "Option B")
-	--Add "TwoVsTwo" into Dropdown Options (replacing "Option C")
-	--move the dropdown just above "roomMaxConnectionsInputField"
-	--add "Layout Element" to Dropdown gameobject...
-	---add Min Height: checked: 45
-	---add Preferred Height: checked: 45
-	---Select the "CreateNewLobbyView" gameobject and add the Dropdown reference to the "Game Type Input Dropdown" component 
-	---Fix the Dropdown child "Label" text to be font size 24 and center aligned
-	-remove "roomMaxConnectionsInputField" gameobject
-	-update script to remove/replace roomMaxConnectionsInputField fields with gameTypeInputDropdown fields...
-	-replace "CreateNewMatch()" logic with the one below:
+1.  Create LobbiesListView based on GamesListView
+    *   Copy script contents to new LobbiesListView script
+    *   Add to game object
+    *   Add same references as original script
+    *   Remove GamesListView from gameobject
+    *   Reposition lobbieslistview in scene editor so it doesn't overlap the gameslistview
+2.  Create CreateNewLobbyView based on CreateNewRoomView
+    *   Duplicate CreateNewRoomView
+    *   Unpack newly created object
+    *   Rename to CreateNewLobbyView
+    *   Create new script "CreateNewLobbyView" with contents of "CreateNewRoomView" script
+    *   Update namespace
+    *   Attach to gameobject
+    *   Update references like original script
+    *   Remove original script CreateNewRoomView
+    *   Reposition new view in scene editor so it doesn't overlap the original view it was copied from
+3.  Create LobbyView based on GamesListView
+    *   Duplicate GamesListView
+    *   Unpack newly created object
+    *   Rename to LobbyView
+    *   Create new script "LobbyView" with contents of "GamesListView" script
+    *   Update namespace
+    *   Attach to gameobject
+    *   Update references like original script
+    *   Remove original script GamesListView
+    *   Reposition new view in scene editor so it doesn't overlap the original view it was copied from
+4.  Add new "Lobbies List" button to MenuView
+    *   Previous notes...
+    *   Attach event handler to LobbiesList button click event to LobbiesListView.Show
+5.  Build master, client, room and run master/spawner. Then test client in editor to ensure Menu > Lobbies List button works
+6.  Update LobbiesListView to open CreateNewLobbyView
+    *   Update "Create New Game" button to "Create New Lobby"
+    *   Rename method LobbiesListView.ShowCreateNewRoomView to LobbiesListView.ShowCreateNewLobbyView
+        *   Fix invoke to call "showCreateLobbyView"
+    *   Fix On Click handlers to reference root "LobbiesListView" gameobject
+    *   Update each handler to call correct methods: LobbiesListView.ShowCreateNewLobbyView & LobbiesListView.Hide
+    *   Update CreateNewLobbyView to listen for "MstEventKeys.showCreateLobbyView"
+    *   Test the button to see if it shows the create lobby dialog box...
+7.  Update CreateNewLobbyView to actually create a new lobby
+    *   Add new Game Type Dropdown
+        *   Right-click "container" gameobject > UI > Dropdown - TextMeshPro naming it "gameTypeInputDropdown"
+        *   Add "Survival" into Dropdown Options (replacing "Option A")
+        *   Add "OneVsOne" into Dropdown Options (replacing "Option B")
+        *   Add "TwoVsTwo" into Dropdown Options (replacing "Option C")
+        *   Move the dropdown just above "roomMaxConnectionsInputField"
+        *   Add "Layout Element" to Dropdown gameobject...
+            *   Add Min Height: checked: 45
+            *   Add Preferred Height: checked: 45
+            *   Select the "CreateNewLobbyView" gameobject and add the Dropdown reference to the "Game Type Input Dropdown" component 
+            *   Fix the Dropdown child "Label" text to be font size 24 and center aligned
+    *   Remove "roomMaxConnectionsInputField" gameobject
+    *   Update script to remove/replace roomMaxConnectionsInputField fields with gameTypeInputDropdown fields...
+    *   Replace "CreateNewMatch()" logic with the one below:
+			```cs
 			public void CreateNewMatch()
 			{
 				Mst.Events.Invoke(MstEventKeys.showLoadingInfo, "Starting lobby... Please wait!");
@@ -75,7 +76,9 @@
 					Show();
 				});
 			}
-	-Create a "MatchmakingBehaviourExtensions" class to implement MatchmakingBehaviour.Instance.CreateNewLobby() and use namespace MasterServerToolkit.Bridges
+			```
+    *   Create a "MatchmakingBehaviourExtensions" class to implement MatchmakingBehaviour.Instance.CreateNewLobby() and use namespace MasterServerToolkit.Bridges
+			```cs
 			/// <summary>
 			/// Sends request to master server to start new lobby
 			/// </summary>
@@ -132,18 +135,19 @@
 					}
 				});
 			}
-	- Update "Start room" button 
-	--Update lable to read "Start Lobby" 
-	--Fix OnClick handler reference to CreateNewLobbyView.CreateNewMatch()
-	--Rename button gameobject to "startLobbyUIButton"
-1. Add Game Types..
-	- Create "Lobbies" folder under App/Scripts...
-	- Copy the Lobby factories and the module from other sources...
-	- Attach LobbyFactoriesModule script to the `Scene:Master//--MASTER_SERVER/SpawnersModule` gameobject so it can register the gametypes...
-1. Rebuild binaries and test creating lobby, it should just be displaying "creating lobby..." at this point..
-===
-1. Update LobbiesListView to list and join lobbies
-	- Add JoinLobby method to MatchmakingBehaviourExtensions:
+			```
+    *   Update "Start room" button 
+        *   Update lable to read "Start Lobby" 
+        *   Fix OnClick handler reference to CreateNewLobbyView.CreateNewMatch()
+        *   Rename button gameobject to "startLobbyUIButton"
+8.  Add Game Types..
+    *   Create "Lobbies" folder under App/Scripts...
+    *   Copy the Lobby factories and the module from other sources...
+    *   Attach LobbyFactoriesModule script to the `Scene:Master//--MASTER_SERVER/SpawnersModule` gameobject so it can register the gametypes...
+9.  Rebuild binaries and test creating lobby, it should just be displaying "creating lobby..." at this point..
+10.  Update LobbiesListView to list and join lobbies
+    *   Add JoinLobby method to MatchmakingBehaviourExtensions:
+			```cs
 			public static void JoinLobby(this MatchmakingBehaviour mmb, GameInfoPacket gameInfo)
 			{
 				var options = new MstProperties();
@@ -162,36 +166,37 @@
 					}
 				});
 			}
-	-Open LobbiesListView and update Join button click handler call from `MatchmakingBehaviour.Instance.StartMatch(gameInfo);` to `MatchmakingBehaviour.Instance.JoinLobby(gameInfo);`
-1. Update LobbyView
-    -update table
-	--go to LobbyView > panel > container > Scroll View > Viewport > Content > * and edit table columns and rows to be the following:
-	---Row 1: [#][Player name][Team][Is Ready]
-	----Update labels on the first objects and delete #4,5,6
-	---Row 2: [1][Demo player][A   ][True    ]
-	----Update labels, then delete buttons
-	---Update LobbyView > panel > container > Scroll View > Viewport > Content
-	----Data Table Layout Group Component > Cols Info Widths: 50,0,250,250
-    -add Start Game button
-	--duplicated from "Cancel" button
-	--rename gameobject to "startGameButton"
-	--move above "Cancel" button
-	--Update label to "Start Game"
-	--update onclick reference to LobbyView gameobject > OnStartGame()
-	--update "LobbyView" gameobject "Start Game Button" reference to map to "startGameButton" gameobject
-	-Rename "updateButton" to "readyButton"
-	--Change label to "Ready"
-	--Change OnClick handler to LobbyView.OnReadyClick()
-	-Rename "createNewGameButton" to "unreadyButton"
-	--Change label to "Un-Ready"
-	--Change OnClick handler to LobbyView.OnUnreadyClick()
-	--Remove additional, unused click handler
-1. Add MatchTimer script
-	-Create MatchTimer.cs script in App/Lobbies/Scripts...
-	-Attach MatchTimer
-	--Open Scene:Room 
-	--Unpack --ROOM_SERVER gameobject
-	--Attach MatchTimer to --ROOM_SERVER gameobject
+			```
+    *   Open LobbiesListView and update Join button click handler call from `MatchmakingBehaviour.Instance.StartMatch(gameInfo);` to `MatchmakingBehaviour.Instance.JoinLobby(gameInfo);`
+11.  Update LobbyView
+    *   Update table
+        *   Go to LobbyView > panel > container > Scroll View > Viewport > Content > * and edit table columns and rows to be the following:
+            *   Row 1: [#][Player name][Team][Is Ready]
+                *   Update labels on the first objects and delete #4,5,6
+            *   Row 2: [1][Demo player][A   ][True    ]
+                *   Update labels, then delete buttons
+            *   Update LobbyView > panel > container > Scroll View > Viewport > Content
+                *   Data Table Layout Group Component > Cols Info Widths: 50,0,250,250
+    *   Add Start Game button
+        *   Duplicated from "Cancel" button
+        *   Rename gameobject to "startGameButton"
+        *   Move above "Cancel" button
+        *   Update label to "Start Game"
+        *   Update onclick reference to LobbyView gameobject > OnStartGame()
+        *   Update "LobbyView" gameobject "Start Game Button" reference to map to "startGameButton" gameobject
+    *   Rename "updateButton" to "readyButton"
+        *   Change label to "Ready"
+        *   Change OnClick handler to LobbyView.OnReadyClick()
+    *   Rename "createNewGameButton" to "unreadyButton"
+        *   Change label to "Un-Ready"
+        *   Change OnClick handler to LobbyView.OnUnreadyClick()
+        *   Remove additional, unused click handler
+12.  Add MatchTimer script (to end game and return players back to the lobby)
+    *   Create MatchTimer.cs script in App/Lobbies/Scripts...
+    *   Attach MatchTimer
+        *   Open Scene:Room 
+        *   Unpack --ROOM_SERVER gameobject
+        *   Attach MatchTimer to --ROOM_SERVER gameobject
  
 	
 ## General Server Deployment Notes
