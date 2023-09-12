@@ -17,7 +17,7 @@ namespace MasterServerToolkit.Bridges
             // Can't call mmb.logger from MatchmakingBehaviour because it's protected...
             //mmb.logger.Debug("Starting lobby... Please wait!");
             var logger = Mst.Create.Logger(nameof(MatchmakingBehaviourExtensions));
-            logger.Debug("Starting lobby... Please wait!");
+            logger.Debug($"Starting {factory} lobby... Please wait!");
 
             // Custom options that will be given to room directly
             var options = new MstProperties();
