@@ -2,6 +2,7 @@
 using MasterServerToolkit.Networking;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace MasterServerToolkit.MasterServer
@@ -791,11 +792,9 @@ namespace MasterServerToolkit.MasterServer
             GamePort = -1;
             lobbyRoom = null;
 
-            //JMH:HACK
-            gameSpawnTask.KillSpawnedProcess();
-            //JMH:HACK END
-
-            gameSpawnTask = null;
+            gameSpawnTask.OnStatusChangedEvent -= OnSpawnServerStatusChanged;
+            gameSpawnTask.KillSpawnedProcess();//jmh
+            //gameSpawnTask = null;
 
             State = Config.PlayAgainEnabled ? LobbyState.Preparations : LobbyState.GameOver;
         }
