@@ -106,7 +106,6 @@ namespace Assets.App.Scripts.UI
 
         private void OnLobbyStateChange(LobbyState state)
         {
-            //statusInfoText.text = $"{statusInfoText.text}; LobbyState[{state}]";
             switch (state)
             {
                 case LobbyState.FailedToStart:
@@ -114,7 +113,7 @@ namespace Assets.App.Scripts.UI
                     Debug.Log("LobbyView:OnLobbyStateChange:FailedToStart");
                     break;
                 case LobbyState.Preparations:
-                    // This is waiting for the game to start (either for the first time or for subsequent times.
+                    // This is waiting for the game to start (either for the first time or for subsequent times).
                     Debug.Log("LobbyView:OnLobbyStateChange:Preparations");
 
                     Scene scene = SceneManager.GetActiveScene();
@@ -137,7 +136,7 @@ namespace Assets.App.Scripts.UI
                     _currentRoomAccess = null;
                     _lobby.GetLobbyRoomAccess((access, error) => 
                     {
-                        Debug.Log("JMH:_lobby.GetLobbyRoomAccess");
+                        Debug.Log("LobbyView:JoinedLobby:GetLobbyRoomAccess");
                         if (!string.IsNullOrWhiteSpace(error))
                         {
                             Mst.Events.Invoke(MstEventKeys.showLoadingInfo, $"Get Lobby Room Access error: [{error}]");

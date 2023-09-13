@@ -791,6 +791,10 @@ namespace MasterServerToolkit.MasterServer
             GamePort = -1;
             lobbyRoom = null;
 
+            //JMH:HACK
+            gameSpawnTask.KillSpawnedProcess();
+            //JMH:HACK END
+
             gameSpawnTask = null;
 
             State = Config.PlayAgainEnabled ? LobbyState.Preparations : LobbyState.GameOver;

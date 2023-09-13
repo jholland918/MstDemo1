@@ -29,7 +29,10 @@
     *   Remove original script GamesListView
     *   Reposition new view in scene editor so it doesn't overlap the original view it was copied from
 4.  Add new "Lobbies List" button to MenuView
-    *   Previous notes...
+    *   Unpack MenuView prefab
+    *   Find GamesList button, duplicate it, unpack it, rename it, reposition it
+    *   Reposition MenuView > panel : Rect Transform Height from 240 to 300
+    *   Change button label to "Lobbies List" in UI Button (Script) > Label Value
     *   Attach event handler to LobbiesList button click event to LobbiesListView.Show
 5.  Build master, client, room and run master/spawner. Then test client in editor to ensure Menu > Lobbies List button works
 6.  Update LobbiesListView to open CreateNewLobbyView
