@@ -6826,9 +6826,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8173311482881878767}
-        m_TargetAssemblyTypeName: MasterServerToolkit.UI.UIView, MasterServerToolkit
-        m_MethodName: Hide
-        m_Mode: 6
+        m_TargetAssemblyTypeName: Assets.App.Scripts.UI.LobbyView, Assembly-CSharp
+        m_MethodName: OnHideLobbyViewEventHandler
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -19747,9 +19747,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8173311482881878767}
-        m_TargetAssemblyTypeName: MasterServerToolkit.UI.UIView, MasterServerToolkit
-        m_MethodName: Hide
-        m_Mode: 6
+        m_TargetAssemblyTypeName: Assets.App.Scripts.UI.LobbyView, Assembly-CSharp
+        m_MethodName: OnHideLobbyViewEventHandler
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

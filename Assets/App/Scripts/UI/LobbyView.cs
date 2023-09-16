@@ -42,7 +42,6 @@ namespace Assets.App.Scripts.UI
 
             // Listen to show/hide events
             Mst.Events.AddListener(AppEventKeys.showLobbyView, OnShowLobbyViewEventHandler);
-            Mst.Events.AddListener(AppEventKeys.hideLobbyView, OnHideLobbyViewEventHandler);
         }
 
         protected override void OnDestroy()
@@ -154,8 +153,9 @@ namespace Assets.App.Scripts.UI
             }
         }
 
-        private void OnHideLobbyViewEventHandler(EventMessage message)
+        public void OnHideLobbyViewEventHandler()
         {
+            _lobby.Leave();
             Hide();
         }
 
@@ -240,11 +240,6 @@ namespace Assets.App.Scripts.UI
         public void OnUnreadyClick()
         {
             _lobby.SetReadyStatus(false);
-        }
-
-        public void OnExitClick()
-        {
-            _lobby.Leave();
         }
 
         public void OnStartGame()
