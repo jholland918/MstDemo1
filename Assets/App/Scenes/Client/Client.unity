@@ -6825,7 +6825,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8173311482881878767}
         m_TargetAssemblyTypeName: MasterServerToolkit.UI.UIView, MasterServerToolkit
         m_MethodName: Hide
         m_Mode: 6
@@ -8991,7 +8991,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 7363805475999535382}
         m_TargetAssemblyTypeName: MasterServerToolkit.UI.UIView, MasterServerToolkit
         m_MethodName: Hide
         m_Mode: 6
@@ -15979,7 +15979,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 9105827032602336944}
         m_TargetAssemblyTypeName: MasterServerToolkit.UI.UIView, MasterServerToolkit
         m_MethodName: Hide
         m_Mode: 6
@@ -15991,7 +15991,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 742297629}
+      - m_Target: {fileID: 7363805475999535382}
         m_TargetAssemblyTypeName: MasterServerToolkit.UI.UIView, MasterServerToolkit
         m_MethodName: Show
         m_Mode: 6
@@ -19746,7 +19746,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8173311482881878767}
         m_TargetAssemblyTypeName: MasterServerToolkit.UI.UIView, MasterServerToolkit
         m_MethodName: Hide
         m_Mode: 6
@@ -21144,7 +21144,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 9105827032602336944}
         m_TargetAssemblyTypeName: MasterServerToolkit.UI.UIView, MasterServerToolkit
         m_MethodName: Hide
         m_Mode: 6
@@ -21156,7 +21156,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 742297629}
+      - m_Target: {fileID: 7363805475999535382}
         m_TargetAssemblyTypeName: MasterServerToolkit.UI.UIView, MasterServerToolkit
         m_MethodName: Show
         m_Mode: 6
@@ -21769,8 +21769,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MasterServerToolkit.Games.GamesListView, MasterServerToolkit
+      - m_Target: {fileID: 7363805475999535382}
+        m_TargetAssemblyTypeName: Assets.App.Scripts.UI.LobbiesListView, Assembly-CSharp
         m_MethodName: FindGames
         m_Mode: 1
         m_Arguments:
@@ -21946,7 +21946,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 7363805475999535382}
         m_TargetAssemblyTypeName: MasterServerToolkit.UI.UIView, MasterServerToolkit
         m_MethodName: Hide
         m_Mode: 6
