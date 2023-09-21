@@ -1,5 +1,20 @@
 # Master Server Toolkit Demo
 
+## Fix Old References
+
+1.  Room Scene References
+	*   Note: Room//Arena object is a prefab that's outside of the /Assets/App folder. Might not need to copy this one over, just know its still in MST.
+	*   Room//--ROOM_SERVER/RoomNetworkManager is referencing MST/Bridges/FishNet/BasicRoomsAndLobbies/Scripts/Room/RoomNetworkManager.cs
+        *   This seems more like a framework-level script that users won't have to edit. So to make things less confusing, delete the copied RoomNetworkManager.cs inside /App/Scripts/Room... to remove confusion. 
+	*   Room//--ROOM_CLIENT/RoomClientManager is referencing the script inside MST/Bridges/FishNet/BasicRoomsAndLobbies/Scripts/Room/. This seems more like a framework class that wouldn't need any user edits. So I'm deleting the copy made inside the /Assets/App... directory
+        *   This seems more like a framework-level script that users won't have to edit. So to make things less confusing, delete the copied RoomNetworkManager.cs inside /App/Scripts/Room... to remove confusion. 
+
+	*   Fix prefab reference in Room Scene\--PLAYER_SPAWNER\PlayerSpawner\Player Prefab. This still references the prefab in MST, change it to the one under /app...
+	*   Fix Spawnable Prefabs reference in Room Scene/--ROOM_SERVER/NetworkManager/Spawnable Prefabs. This still references the MST object, change to /App/Data/Demo SinglePrefabsObjects
+	*   Switch FpsPrefab reference in /App/Data/Demo SinglePrefabsObjects to the correct one under /App
+	*   Double check that the FpsPrefab is still working in Room Scene\--PLAYER_SPAWNER\PlayerSpawner\Player Prefab...
+	
+
 ## Game Type Implementation Steps (WIP)
 
 1.  Create LobbiesListView based on GamesListView
@@ -15,10 +30,6 @@
 	*   Attach PerformantShoot to FpsCharacter prefab
 	*   Add reference to bullet prefab
 	*   Set bullet speed to 3
-	*   Fix prefab reference in Room Scene\--PLAYER_SPAWNER\PlayerSpawner\Player Prefab. This still references the prefab in MST, change it to the one under /app...
-	*   Fix Spawnable Prefabs reference in Room Scene/--ROOM_SERVER/NetworkManager/Spawnable Prefabs. This still references the MST object, change to /App/Data/Demo SinglePrefabsObjects
-	*   Switch FpsPrefab reference in /App/Data/Demo SinglePrefabsObjects to the correct one under /App
-	*   Double check that the FpsPrefab is still working in Room Scene\--PLAYER_SPAWNER\PlayerSpawner\Player Prefab...
 	
 ## General Server Deployment Notes
 
