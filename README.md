@@ -23,8 +23,29 @@
 	*   Room//--ROOM_SERVER/DefaultScene
         *   Switch Offline Scene to Client under /App instead of MST...
 		*   Switch Online Scene to Room under /App instead of MST...
-	*   TODO: Assets/App/Prefabs/FpsCharacter
+	*   Assets/App/Prefabs/FpsCharacter
 		*   Fix references for attached scripts to be from /Assets/App instead of Assets/MST...
+			PlayerCharacter
+			  OLD: 0543a073d387b9b479f00b44ff7b949f
+			  NEW: 85aa384a4284be0488ed946023e63858
+			PlayerCharacterAvatar
+			  OLD: 25cbee4aa79d5cc48ac6a2009de1ddba
+			  NEW: 57c57943fea2d4b4eabacddd3910b205
+			PlayerCharacterFpsLook
+			  OLD: 90ac1276ec5a5e24bad6f9acde8e171d
+			  NEW: ebff41c91a3155546bee1270943b4775
+			PlayerCharacterInput
+			  OLD: f5887ef270305f54fbdd6c4b9696540d
+			  NEW: 77ebb3e1156c246478ab36e696c394b8
+			PlayerCharacterMovement
+			  OLD: f46a67a6e947bed4588feab023ff4320
+			  NEW: a9a9bda166f3aa74ab551469db5c0139
+			PlayerCharacterTopDownLook
+			  OLD: bd8c72afd7f3cdc4083a95070d81bd35
+			  NEW: 778f12db4da93fd4d8bac75555f1bd1a
+			PlayerCharacterTopDownMovement
+			  OLD: 2069cae679e418548ac870ccec6faf83
+			  NEW: 49985a3c3c1dc2f40b6e5d2d17c89951
 	*   TODO: Look at Room//MasterCanvas refs...
 	
 ## Game Type Implementation Steps (WIP)
