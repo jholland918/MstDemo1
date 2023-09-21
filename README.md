@@ -1,20 +1,30 @@
 # Master Server Toolkit Demo
 
-## Fix Old References
+## Reference Cleanup (WIP)
 
 1.  Room Scene References
-	*   Note: Room//Arena object is a prefab that's outside of the /Assets/App folder. Might not need to copy this one over, just know its still in MST.
-	*   Room//--ROOM_SERVER/RoomNetworkManager is referencing MST/Bridges/FishNet/BasicRoomsAndLobbies/Scripts/Room/RoomNetworkManager.cs
+	*   Room//Arena object is a prefab that's outside of the /Assets/App folder. 
+        *   Might not need to copy this one over unless you want to keep it in your game and make edits to it. Just know its still in MST.
+	*   Room//--ROOM_SERVER/RoomNetworkManager 
+        *   This is referencing MST/Bridges/FishNet/BasicRoomsAndLobbies/Scripts/Room/RoomNetworkManager.cs
         *   This seems more like a framework-level script that users won't have to edit. So to make things less confusing, delete the copied RoomNetworkManager.cs inside /App/Scripts/Room... to remove confusion. 
-	*   Room//--ROOM_CLIENT/RoomClientManager is referencing the script inside MST/Bridges/FishNet/BasicRoomsAndLobbies/Scripts/Room/. This seems more like a framework class that wouldn't need any user edits. So I'm deleting the copy made inside the /Assets/App... directory
-        *   This seems more like a framework-level script that users won't have to edit. So to make things less confusing, delete the copied RoomNetworkManager.cs inside /App/Scripts/Room... to remove confusion. 
-
-	*   Fix prefab reference in Room Scene\--PLAYER_SPAWNER\PlayerSpawner\Player Prefab. This still references the prefab in MST, change it to the one under /app...
-	*   Fix Spawnable Prefabs reference in Room Scene/--ROOM_SERVER/NetworkManager/Spawnable Prefabs. This still references the MST object, change to /App/Data/Demo SinglePrefabsObjects
-	*   Switch FpsPrefab reference in /App/Data/Demo SinglePrefabsObjects to the correct one under /App
-	*   Double check that the FpsPrefab is still working in Room Scene\--PLAYER_SPAWNER\PlayerSpawner\Player Prefab...
+	*   Room//--ROOM_CLIENT/RoomClientManager 
+        *   This is referencing the script inside MST/Bridges/FishNet/BasicRoomsAndLobbies/Scripts/Room/. 
+        *   This seems more like a framework class that wouldn't need any user edits. So I'm deleting the copy made inside the /Assets/App... directory
+	*   Room//--ROOM_SERVER/NetworkManager/Spawnable Prefabs 
+        *   This still references the MST object, change to /App/Data/Demo SinglePrefabsObjects
+	*   Room//--ROOM_SERVER/NetworkManager/Logging 
+        *   This still references the MST object, change to /App/Data/Demo LoggingConfiguration
+	*   Room//--PLAYER_SPAWNER/PlayerSpawner/Player Prefab 
+        *   This still references the prefab in MST, change it to the one under /App/Prefabs
+	*   Assets/App/Data/Demo SinglePrefabsObjects
+        *   Switch FpsCharacter to correct one located under Assets/App...
+		*   Also fix the "TopdownCharacter" reference as well
+	*   Room//--ROOM_SERVER/DefaultScene
+        *   Switch Offline Scene to Client under /App instead of MST...
+		*   Switch Online Scene to Room under /App instead of MST...
+	*   TODO: Look at Room//MasterCanvas refs...
 	
-
 ## Game Type Implementation Steps (WIP)
 
 1.  Create LobbiesListView based on GamesListView

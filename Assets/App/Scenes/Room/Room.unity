@@ -7173,7 +7173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 211a9f6ec51ddc14f908f5acc0cd0423, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerPrefab: {fileID: -4936559094045431684, guid: a254f666eb0044949912607eec09bdde,
+  _playerPrefab: {fileID: -4936559094045431684, guid: 9abacf27ec1ca5b4984e977e03931fd3,
     type: 3}
   _addToDefaultScene: 1
   Spawns:
@@ -8264,8 +8264,8 @@ MonoBehaviour:
   _dontDestroyOnLoad: 1
   _objectPool: {fileID: 0}
   _persistence: 0
-  _logging: {fileID: 11400000, guid: 36d2500f6fd077d4691cbc09333202a4, type: 2}
-  _spawnablePrefabs: {fileID: 11400000, guid: d8910c11a56a448468126fadd5e483b3, type: 2}
+  _logging: {fileID: 11400000, guid: 09efa4d8ef513ed4db5cfdf4146255c4, type: 2}
+  _spawnablePrefabs: {fileID: 11400000, guid: 4c8457303d802ba4f8c9345a47e540d4, type: 2}
 --- !u!114 &1182598396927263050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8451,8 +8451,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enableGlobalScenes: 1
   _startInOffline: 0
-  _offlineScene: Assets/MasterServerToolkit/Bridges/FishNet/BasicRoomsAndLobbies/Scenes/Client/Client.unity
-  _onlineScene: Assets/MasterServerToolkit/Bridges/FishNet/BasicRoomsAndLobbies/Scenes/Room/Room.unity
+  _offlineScene: Assets/App/Scenes/Client/Client.unity
+  _onlineScene: Assets/App/Scenes/Room/Room.unity
   _replaceScenes: 0
 --- !u!114 &6429945056893627716
 MonoBehaviour:
