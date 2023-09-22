@@ -1,5 +1,8 @@
 # Master Server Toolkit Demo
 
+## MST7 Game Types
+1.  Add PlayerCharacterShoot.cs to /scripts/character
+
 ## Reference Cleanup (WIP)
 
 1.  Room Scene References
