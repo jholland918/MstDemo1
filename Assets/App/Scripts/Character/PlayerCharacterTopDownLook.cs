@@ -1,7 +1,7 @@
 ﻿#if FISHNET
 using UnityEngine;
 
-namespace MasterServerToolkit.Bridges.FishNetworking.Character
+namespace Assets.App.Scripts.Character
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(PlayerCharacterInput))]
@@ -64,7 +64,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
 
         protected override void Update()
         {
-            if (base.IsOwner && IsReady)
+            if (IsOwner && IsReady)
             {
                 UpdateCameraDistance();
                 UpdateCameraPosition();
@@ -77,7 +77,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         public override void OnStartClient()
         {
             base.OnStartClient();
-            if (base.IsOwner)
+            if (IsOwner)
             {
                 RecalculateDistance();
                 CreateCameraControls();
@@ -229,7 +229,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
             }
             else
             {
-                currentCameraDistance = Mathf.Clamp(currentCameraDistance - (inputController.MouseVerticalScroll() * distanceScrollPower), minDistance, maxDistance);
+                currentCameraDistance = Mathf.Clamp(currentCameraDistance - inputController.MouseVerticalScroll() * distanceScrollPower, minDistance, maxDistance);
                 lookCamera.transform.localPosition = Vector3.Lerp(lookCamera.transform.localPosition, new Vector3(0f, 0f, currentCameraDistance * -1f), Time.deltaTime * distanceSmoothTime);
             }
         }
@@ -241,7 +241,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         private bool IsCharacterOutOfBounds()
         {
             Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-            if (usePadding) return (screenPos.x <= minHorizontalPadding || screenPos.y <= minVerticalPadding || screenPos.x >= Screen.width - maxHorizontalPadding || screenPos.y >= Screen.height - maxVerticalPadding);
+            if (usePadding) return screenPos.x <= minHorizontalPadding || screenPos.y <= minVerticalPadding || screenPos.x >= Screen.width - maxHorizontalPadding || screenPos.y >= Screen.height - maxVerticalPadding;
             else return false;
         }
 

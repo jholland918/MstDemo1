@@ -1,7 +1,7 @@
 ﻿#if FISHNET
 using UnityEngine;
 
-namespace MasterServerToolkit.Bridges.FishNetworking.Character
+namespace Assets.App.Scripts.Character
 {
     [DisallowMultipleComponent]
     public class PlayerCharacterInput : MonoBehaviour

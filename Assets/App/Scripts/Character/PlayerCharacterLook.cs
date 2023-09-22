@@ -3,7 +3,7 @@ using FishNet.Connection;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
 
-namespace MasterServerToolkit.Bridges.FishNetworking.Character
+namespace Assets.App.Scripts.Character
 {
     public class PlayerCharacterLook : PlayerCharacterBehaviour
     {
@@ -60,7 +60,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         public override bool IsReady => base.IsReady
             && inputController
             && movementController
-            && base.IsClient;
+            && IsClient;
 
         protected virtual void Update() { }
 
@@ -69,7 +69,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         /// </summary>
         protected void DetachCamera()
         {
-            if (base.IsOwner && lookCamera)
+            if (IsOwner && lookCamera)
             {
                 if (initialCameraParent != null)
                 {

@@ -1,7 +1,7 @@
 ﻿#if FISHNET
 using UnityEngine;
 
-namespace MasterServerToolkit.Bridges.FishNetworking.Character
+namespace Assets.App.Scripts.Character
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(PlayerCharacterInput))]
@@ -48,7 +48,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
 
         protected override void Update()
         {
-            if (base.IsOwner && IsReady)
+            if (IsOwner && IsReady)
             {
                 UpdateCameraPosition();
                 UpdateCameraRotation();
@@ -64,7 +64,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         public override void OnStartClient()
         {
             base.OnStartClient();
-            if (base.IsOwner)
+            if (IsOwner)
                 CreateCameraControls();
         }
 

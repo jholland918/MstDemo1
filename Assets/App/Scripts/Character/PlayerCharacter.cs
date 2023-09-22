@@ -1,7 +1,7 @@
 ﻿#if FISHNET
 using System;
 
-namespace MasterServerToolkit.Bridges.FishNetworking.Character
+namespace Assets.App.Scripts.Character
 {
     public class PlayerCharacter : PlayerCharacterBehaviour
     {

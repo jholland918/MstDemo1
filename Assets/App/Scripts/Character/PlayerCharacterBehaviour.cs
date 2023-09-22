@@ -4,7 +4,7 @@ using MasterServerToolkit.Logging;
 using MasterServerToolkit.MasterServer;
 using UnityEngine;
 
-namespace MasterServerToolkit.Bridges.FishNetworking.Character
+namespace Assets.App.Scripts.Character
 {
     public class PlayerCharacterBehaviour : NetworkBehaviour
     {
@@ -21,7 +21,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         /// <summary>
         /// Logger assigned to this module
         /// </summary>
-        protected Logging.Logger logger;
+        protected MasterServerToolkit.Logging.Logger logger;
 
         /// <summary>
         /// Check if this behaviour is ready
