@@ -54,7 +54,7 @@
 		*   In Room Scene//--ROOM_SERVER game object (NOT prefab)
 		    *   Add Match Timer script
 			*   Set Room Server Manager > Terminate Room Delay = 0
-	*   TODO: Look at Room//MasterCanvas refs...
+	*   TODO: Look at Room//MasterCanvas refs and decide if they should be left alone or not.
 	
 ## Game Type Implementation Steps (WIP)
 
