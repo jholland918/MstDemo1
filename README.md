@@ -49,6 +49,11 @@
 	*   Fix Assets/App/Prefabs/--ROOM_SERVER refs
 		*   NetworkManager > Logging & Spawnable Prefabs
 		*   DefaultScene > Offline Scene & Online Scene
+		*   Delete --ROOM_SERVER from Client Scene and re-add it from App/Prefabs
+		*   Delete --ROOM_SERVER from Room Scene and re-add it from App/Prefabs
+		*   In Room Scene//--ROOM_SERVER game object (NOT prefab)
+		    *   Add Match Timer script
+			*   Set Room Server Manager > Terminate Room Delay = 0
 	*   TODO: Look at Room//MasterCanvas refs...
 	
 ## Game Type Implementation Steps (WIP)
