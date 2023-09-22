@@ -229,6 +229,7 @@ GameObject:
   - component: {fileID: 8015347165786630561}
   - component: {fileID: 5893848400122023704}
   - component: {fileID: -4936559094045431684}
+  - component: {fileID: 7566610480161174840}
   m_Layer: 0
   m_Name: FpsCharacter
   m_TagString: Untagged
@@ -454,8 +455,8 @@ MonoBehaviour:
   <ChildNetworkObjects>k__BackingField: []
   SerializedTransformProperties:
     Position: {x: 0, y: 0, z: 0}
-    Rotation: {x: 0, y: 0, z: 0, w: 0}
-    LocalScale: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0, w: 1}
+    LocalScale: {x: 1, y: 1, z: 1}
   _isNetworked: 1
   _isGlobal: 0
   _initializeOrder: 0
@@ -466,3 +467,21 @@ MonoBehaviour:
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 8386242300843252591
+--- !u!114 &7566610480161174840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8786336352432102918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9651db9b14abfc34eae49b8bc4949724, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: -4936559094045431684}
+  _networkObjectCache: {fileID: 0}
+  logLevel: 3
+  _projectile: {fileID: 6092196110147339335, guid: 122c27f2833c15840aff08fec5d288a8,
+    type: 3}

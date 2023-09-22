@@ -22,7 +22,7 @@ namespace Assets.App.Scripts.Lobbies
         void Start()
         {
             Debug.Log("MatchTimer:Start");
-            StartCoroutine("Countdown", 10);
+            StartCoroutine("Countdown", 30);
         }
 
         private IEnumerator Countdown(int time)
