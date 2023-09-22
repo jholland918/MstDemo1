@@ -4,7 +4,7 @@ using MasterServerToolkit.Networking;
 using System;
 using UnityEngine;
 
-namespace MasterServerToolkit.Bridges.FishNetworking.Character
+namespace Assets.App.Scripts.Character
 {
     public delegate void VitalChangeFloatDelegate(short key, float value);
 
@@ -48,7 +48,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         /// <param name="value"></param>
         public void NotifyVitalChanged(short key, float value)
         {
-            if (base.IsServer)
+            if (IsServer)
             {
                 Rpc_NotifyVitalChanged(key, value);
             }
@@ -57,7 +57,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         [ObserversRpc]
         private void Rpc_NotifyVitalChanged(short key, float value)
         {
-            if (base.IsOwner)
+            if (IsOwner)
             {
                 OnVitalChangedEvent?.Invoke(key, value);
             }
@@ -68,7 +68,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         /// </summary>
         public void NotifyAlive()
         {
-            if (base.IsServer)
+            if (IsServer)
             {
                 IsAlive = true;
                 Rpc_NotifyAlive();
@@ -78,7 +78,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         [ObserversRpc]
         private void Rpc_NotifyAlive()
         {
-            if (base.IsOwner)
+            if (IsOwner)
             {
                 IsAlive = true;
                 OnAliveEvent?.Invoke();
@@ -90,7 +90,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         /// </summary>
         public void NotifyDied()
         {
-            if (base.IsServer)
+            if (IsServer)
             {
                 characterController.enabled = false;
 
@@ -102,7 +102,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         [ObserversRpc]
         private void Rpc_NotifyDied()
         {
-            if (base.IsOwner)
+            if (IsOwner)
             {
                 characterController.enabled = false;
 

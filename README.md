@@ -55,6 +55,8 @@
 		    *   Add Match Timer script
 			*   Set Room Server Manager > Terminate Room Delay = 0
 	*   TODO: Look at Room//MasterCanvas refs and decide if they should be left alone or not.
+2. Cleanup Namespaces
+	*   In Assets/App/Scripts/Character, update all scripts to use a namespace representing the directory they're located in
 	
 ## Game Type Implementation Steps (WIP)
 

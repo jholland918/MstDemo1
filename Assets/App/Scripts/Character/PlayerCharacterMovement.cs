@@ -3,7 +3,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
 
-namespace MasterServerToolkit.Bridges.FishNetworking.Character
+namespace Assets.App.Scripts.Character
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(PlayerCharacterInput), typeof(CharacterController))]
@@ -75,7 +75,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         /// <summary>
         /// Check if this behaviour is ready
         /// </summary>
-        public override bool IsReady => inputController && characterController && lookController && base.IsClient;
+        public override bool IsReady => inputController && characterController && lookController && IsClient;
 
         /// <summary>
         /// Speed of the character
@@ -99,7 +99,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
 
         protected void Update()
         {
-            if (base.IsOwner && IsReady)
+            if (IsOwner && IsReady)
             {
                 UpdateJumpAvailability();
                 UpdateMovementStates();
@@ -188,7 +188,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         /// <param name="value"></param>
         public void AllowRunning(bool value)
         {
-            if (base.IsServer)
+            if (IsServer)
             {
                 runningIsAllowed = value;
             }
@@ -200,7 +200,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         /// <param name="value"></param>
         public void AllowMoving(bool value)
         {
-            if (base.IsServer)
+            if (IsServer)
             {
                 movementIsAllowed = value;
             }
