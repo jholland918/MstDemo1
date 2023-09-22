@@ -46,6 +46,9 @@
 			PlayerCharacterTopDownMovement
 			  OLD: 2069cae679e418548ac870ccec6faf83
 			  NEW: 49985a3c3c1dc2f40b6e5d2d17c89951
+	*   Fix Assets/App/Prefabs/--ROOM_SERVER refs
+		*   NetworkManager > Logging & Spawnable Prefabs
+		*   DefaultScene > Offline Scene & Online Scene
 	*   TODO: Look at Room//MasterCanvas refs...
 	
 ## Game Type Implementation Steps (WIP)
