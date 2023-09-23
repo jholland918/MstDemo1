@@ -49,7 +49,7 @@ namespace Assets.App.Scripts.Character
         }
 
         [Tooltip("Time in seconds to wait before allowing the next attack. 1 means 1 attack per second, 0.5 means 2 attacks per second etc")]
-        public float _cooldown = 1;
+        public float _cooldown = 1000;
 
         private float _cooldownTime = 0;
 
@@ -71,7 +71,7 @@ namespace Assets.App.Scripts.Character
         /// </summary>
         private void ClientFire()
         {
-            Vector3 position = transform.position;
+            Vector3 position = transform.position + transform.forward * 1f + transform.up;
             Vector3 direction = transform.forward;
 
             /* Spawn locally with 0f passed time.
