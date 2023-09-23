@@ -1,7 +1,11 @@
 # Master Server Toolkit Demo
 
 ## MST7 Game Types
-1.  Add PlayerCharacterShoot.cs to /scripts/character
+1.  Add /Assets/App/Scripts/Character/PlayerCharacterShoot.cs
+2.  Add /Assets/App/Scripts/Character/PredictedProjectile.cs
+3.  Attach PlayerCharacterShoot.cs to FpsCharacter prefab
+4.  Create Bullet prefab and attach PredictedProjectile.cs
+5.  Add reference to Bullet prefab on FpsCharacter > PlayerCharacterShoot > Projectile ref
 
 ## Reference Cleanup (WIP)
 
