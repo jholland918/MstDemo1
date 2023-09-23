@@ -9,6 +9,8 @@ namespace Assets.App.Scripts.Lobbies
     /// </summary>
     public class MatchTimer : MonoBehaviour
     {
+        public int MatchTimeSeconds = 300;
+
         private RoomServerManager _roomManager;
         private RoomController _roomController;
 
@@ -22,7 +24,7 @@ namespace Assets.App.Scripts.Lobbies
         void Start()
         {
             Debug.Log("MatchTimer:Start");
-            StartCoroutine("Countdown", 30);
+            StartCoroutine("Countdown", MatchTimeSeconds);
         }
 
         private IEnumerator Countdown(int time)
