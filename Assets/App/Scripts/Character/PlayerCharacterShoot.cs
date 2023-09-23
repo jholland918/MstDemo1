@@ -28,13 +28,13 @@ namespace Assets.App.Scripts.Character
             if (base.IsOwner == false)
                 return;
 
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButtonDown(0))
             {
-                _shootQueue = true;
+                _attackQueue = true;
             }
         }
 
-        private bool _shootQueue;
+        private bool _attackQueue;
         
         public override void OnStartNetwork()
         {
@@ -48,14 +48,20 @@ namespace Assets.App.Scripts.Character
             base.TimeManager.OnTick -= TimeManager_OnTick;
         }
 
+        [Tooltip("Time in seconds to wait before allowing the next attack. 1 means 1 attack per second, 0.5 means 2 attacks per second etc")]
+        public float _cooldown = 1;
+
+        private float _cooldownTime = 0;
+
         private void TimeManager_OnTick()
         {
             if (base.IsOwner)
             {
-                if (_shootQueue)
+                if (_attackQueue & Time.time > _cooldownTime)
                 {
-                    _shootQueue = false;
+                    _attackQueue = false;
                     ClientFire();
+                    _cooldownTime = Time.time + _cooldown;
                 }
             }
         }
