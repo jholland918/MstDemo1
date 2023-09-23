@@ -19,13 +19,11 @@
         *   Ensure custom code is added to script...
 	*   Update PredictedProjectile > OnCollisionEnter() to add damage to PlayerCharacterVitals...
 	    *   Note: The `PlayerCharacterVitals playerVitals = collision.gameObject.GetComponent<PlayerCharacterVitals>();` needs to use GetComponentInParent<>() since the collision will be happening on a child gameObject of "Body"
-	*   A
-	*   A
-	*   A
-	*   A
-	*   A
-	*   A
-	*   A
+	*   Add rigidbody to FpsCharacter prefab
+	    *   Open FpsCharacter prefab
+	    *   Add rigidbody to child gameobject "Body"
+		    *   Freeze XYZ Position & Rotation
+		    *   Uncheck "Use Gravity"
 7.  ???
 8.  Profit!!
 
