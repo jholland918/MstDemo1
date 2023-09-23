@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.App.Scripts.Character
 {
-    public class PredictedProjectile : MonoBehaviour //NetworkObject
+    public class PredictedProjectile : MonoBehaviour
     {
         /// <summary>
         /// Direction to travel.
@@ -78,11 +78,13 @@ namespace Assets.App.Scripts.Character
             transform.position += _direction * (MOVE_RATE * (delta + passedTimeDelta));
         }
 
+        // https://stackoverflow.com/questions/18281385/oncollisionenter-not-working-in-unity3d
         /// <summary>
         /// Handles collision events.
         /// </summary>
         private void OnCollisionEnter(Collision collision)
         {
+            Debug.Log("jmh:OnCollisionEnter");
             /* These projectiles are instantiated locally, as in,
              * they are not networked. Because of this there is a very
              * small chance the occasional projectile may not align with
@@ -100,13 +102,22 @@ namespace Assets.App.Scripts.Character
             if (InstanceFinder.IsServer)
             {
                 Debug.Log("*** damage hit objects ***");
-                //////PlayerShip ps = collision.gameObject.GetComponent<PlayerShip>();
+                //PlayerCharacterVitals playerVitals = collision.gameObject.GetComponent<PlayerCharacterVitals>();
+                PlayerCharacterVitals playerVitals = collision.gameObject.GetComponentInParent<PlayerCharacterVitals>();
 
-                ///////* If a player ship was hit then remove 50 health.
-                ////// * The health value can be synchronized however you like,
-                ////// * such as a syncvar. */
-                //////if (ps != null)
-                //////    ps.Health -= 50f;
+                /* If a player was hit then remove 2 health.
+                 * The health value can be synchronized however you like,
+                 * such as a syncvar. */
+                if (playerVitals != null)
+                {
+                    Debug.Log("Vitals Found!!! UPDATING....");
+                    playerVitals.Health -= 2;
+                }
+                else
+                {
+                    Debug.Log("No Vitals Found!!!");
+                }
+                    
             }
 
             //Destroy projectile (probably pool it instead).

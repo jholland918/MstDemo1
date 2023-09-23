@@ -6,6 +6,28 @@
 3.  Attach PlayerCharacterShoot.cs to FpsCharacter prefab
 4.  Create Bullet prefab and attach PredictedProjectile.cs
 5.  Add reference to Bullet prefab on FpsCharacter > PlayerCharacterShoot > Projectile ref
+6.  Add Player Health
+	*   For Room//MasterCanvas/RoomHudView, unpack RoomHudView prefab so MST upgrades will not affect it
+	*   Add "HealthText" to RoomHudView: Right-click RoomHudView > UI > Text - TextMeshPro, named "HealthText"
+	*   HealthText Setup
+        *   Rect Transform > Anchor > Top Left
+        *   Rect Transform > Pivot > x 0 y 1
+        *   Rect Transform > Pos X 20, Pos Y -90
+		https://youtu.be/hQyBnHofCKg?si=Mj7DfUMpfiFORJaZ
+	*   Attach PlayerCharacterVitals.cs to FpsCharacter prefab
+        *   Reference the Character Controller on the prefab to the property of the same name to the PlayerCharacterVitals.cs
+        *   Ensure custom code is added to script...
+	*   Update PredictedProjectile > OnCollisionEnter() to add damage to PlayerCharacterVitals...
+	    *   Note: The `PlayerCharacterVitals playerVitals = collision.gameObject.GetComponent<PlayerCharacterVitals>();` needs to use GetComponentInParent<>() since the collision will be happening on a child gameObject of "Body"
+	*   A
+	*   A
+	*   A
+	*   A
+	*   A
+	*   A
+	*   A
+7.  ???
+8.  Profit!!
 
 ## Reference Cleanup (WIP)
 

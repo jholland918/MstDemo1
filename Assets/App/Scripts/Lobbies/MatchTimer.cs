@@ -32,7 +32,7 @@ namespace Assets.App.Scripts.Lobbies
             while (time > 0)
             {
                 time--;
-                Debug.Log($"MatchTimer:Countdown:{time}");
+                //Debug.Log($"MatchTimer:Countdown:{time}");
                 yield return new WaitForSeconds(1);
             }
             Debug.Log("MatchTimer:Countdown Complete!");

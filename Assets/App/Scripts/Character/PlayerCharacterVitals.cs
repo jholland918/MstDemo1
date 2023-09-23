@@ -1,7 +1,9 @@
 ﻿#if FISHNET
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using MasterServerToolkit.Networking;
 using System;
+using TMPro;
 using UnityEngine;
 
 namespace Assets.App.Scripts.Character
@@ -40,6 +42,27 @@ namespace Assets.App.Scripts.Character
         public bool IsAlive { get; protected set; } = true;
 
         public override bool IsReady => characterController;
+
+        #region MstDemo1 Changes
+        [SyncVar] public int Health = 10;
+        private TextMeshProUGUI healthText;
+
+        private void Start()
+        {
+            // TODO: This is a very brittle way to reference a game object. Look into sending events instead.
+            healthText = GameObject.Find("/MasterCanvas/RoomHudView/HealthText").GetComponent<TextMeshProUGUI>();
+        }
+
+        private void Update()
+        {
+            if (!base.IsOwner)
+            {
+                return;
+            }
+
+            healthText.text = Health.ToString();
+        }
+        #endregion MstDemo1 Changes
 
         /// <summary>
         /// 
