@@ -48,20 +48,14 @@ namespace Assets.App.Scripts.Character
             base.TimeManager.OnTick -= TimeManager_OnTick;
         }
 
-        [Tooltip("Time in seconds to wait before allowing the next attack. 1 means 1 attack per second, 0.5 means 2 attacks per second etc")]
-        public float _cooldown = 1000;
-
-        private float _cooldownTime = 0;
-
         private void TimeManager_OnTick()
         {
             if (base.IsOwner)
             {
-                if (_attackQueue & Time.time > _cooldownTime)
+                if (_attackQueue)
                 {
                     _attackQueue = false;
                     ClientFire();
-                    _cooldownTime = Time.time + _cooldown;
                 }
             }
         }
