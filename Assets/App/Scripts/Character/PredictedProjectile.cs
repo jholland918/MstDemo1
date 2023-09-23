@@ -84,7 +84,6 @@ namespace Assets.App.Scripts.Character
         /// </summary>
         private void OnCollisionEnter(Collision collision)
         {
-            Debug.Log("jmh:OnCollisionEnter");
             /* These projectiles are instantiated locally, as in,
              * they are not networked. Because of this there is a very
              * small chance the occasional projectile may not align with
@@ -110,14 +109,8 @@ namespace Assets.App.Scripts.Character
                  * such as a syncvar. */
                 if (playerVitals != null)
                 {
-                    Debug.Log("Vitals Found!!! UPDATING....");
                     playerVitals.Health -= 2;
                 }
-                else
-                {
-                    Debug.Log("No Vitals Found!!!");
-                }
-                    
             }
 
             //Destroy projectile (probably pool it instead).
