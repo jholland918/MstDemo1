@@ -44,23 +44,12 @@ namespace Assets.App.Scripts.Character
         public override bool IsReady => characterController;
 
         #region MstDemo1 Changes
-        [SyncVar] public int Health = 10;
-        private TextMeshProUGUI healthText;
+        public int Health = 10;
 
-        private void Start()
+        public void TakeDamage(int hitPoints)
         {
-            // TODO: This is a very brittle way to reference a game object. Look into sending events instead.
-            healthText = GameObject.Find("/MasterCanvas/RoomHudView/HealthText").GetComponent<TextMeshProUGUI>();
-        }
-
-        private void Update()
-        {
-            if (!base.IsOwner)
-            {
-                return;
-            }
-
-            healthText.text = Health.ToString();
+            Health -= hitPoints;
+            NotifyVitalChanged((short)PlayerVitalsKey.Health, Health);
         }
         #endregion MstDemo1 Changes
 

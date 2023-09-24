@@ -101,7 +101,6 @@ namespace Assets.App.Scripts.Character
             if (InstanceFinder.IsServer)
             {
                 Debug.Log("*** damage hit objects ***");
-                //PlayerCharacterVitals playerVitals = collision.gameObject.GetComponent<PlayerCharacterVitals>();
                 PlayerCharacterVitals playerVitals = collision.gameObject.GetComponentInParent<PlayerCharacterVitals>();
 
                 /* If a player was hit then remove 2 health.
@@ -109,7 +108,7 @@ namespace Assets.App.Scripts.Character
                  * such as a syncvar. */
                 if (playerVitals != null)
                 {
-                    playerVitals.Health -= 2;
+                    playerVitals.TakeDamage(2);
                 }
             }
 

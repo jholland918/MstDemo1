@@ -24,8 +24,15 @@
 	    *   Add rigidbody to child gameobject "Body"
 		    *   Freeze XYZ Position & Rotation
 		    *   Uncheck "Use Gravity"
-7.  ???
-8.  Profit!!
+7.  Make RoomHudView.cs (in Room//MasterCanvas) our own script so we can customize it.
+	*   Copy Assets/MasterServerToolkit/Demos/BasicRoomsAndLobbies/Scripts/RoomHudView.cs to Assets/App/Scripts/RoomHudView.cs
+	*   Update guid refs in Room.unity scene
+	    OLD: 1b0d71f0b05837841878ef1150897d70
+		NEW: 3101137a69689e8448641bc5f343daee (changes each time it's copied btw)
+	*   Change namespace to `Assets.App.Scripts`
+	*   Add HealthText ref from hierarchy to script property in inspector
+8.  ???
+9.  Profit!!
 
 ## Reference Cleanup (WIP)
 

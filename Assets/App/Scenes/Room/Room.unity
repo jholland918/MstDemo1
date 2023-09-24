@@ -651,7 +651,7 @@ PrefabInstance:
     - target: {fileID: 757970465690165507, guid: 486cd82c994506a4d9b252b2abc8c4a5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1252
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 757970465690165507, guid: 486cd82c994506a4d9b252b2abc8c4a5,
         type: 3}
@@ -1918,7 +1918,7 @@ PrefabInstance:
     - target: {fileID: 5241155989832688097, guid: 332c57a2374b8544582abd08d466dbeb,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1207
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5241155989832688097, guid: 332c57a2374b8544582abd08d466dbeb,
         type: 3}
@@ -2137,6 +2137,41 @@ PrefabInstance:
         type: 3}
       propertyPath: terminateRoomDelay
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnPlayerJoinedRoomEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnPlayerJoinedRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnPlayerJoinedRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 96597583923481238}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnPlayerJoinedRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnPlayerJoinedRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnPlayerJoinedRoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnPlayerJoinedRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Assets.App.Scripts.RoomHudView, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnPlayerJoinedRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1182598396324832461, guid: c3de8d202f590fc4c980a357203c6161,
         type: 3}
@@ -2892,6 +2927,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 362234999}
     m_Modifications:
+    - target: {fileID: 4465368498838903730, guid: 42ba4e1d050683c4cb8c16de9131ac83,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4465368499774140371, guid: 42ba4e1d050683c4cb8c16de9131ac83,
         type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -2996,7 +3036,7 @@ PrefabInstance:
     - target: {fileID: 4465368499774140375, guid: 42ba4e1d050683c4cb8c16de9131ac83,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1263.7499
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4465368499774140375, guid: 42ba4e1d050683c4cb8c16de9131ac83,
         type: 3}
@@ -3523,6 +3563,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4245698666461070994, guid: 59e4f62c32cfeb541a8d58ff9f8fdf1b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4900295484910147741, guid: 59e4f62c32cfeb541a8d58ff9f8fdf1b,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3549,6 +3594,11 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4900295484910147741, guid: 59e4f62c32cfeb541a8d58ff9f8fdf1b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6266122627660033743, guid: 59e4f62c32cfeb541a8d58ff9f8fdf1b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
@@ -4540,6 +4590,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3229390042870045116, guid: 8ada41da18c269146b885553bc7b6d0f,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4562,6 +4617,11 @@ PrefabInstance:
     - target: {fileID: 11209950923185052, guid: 93bf78af47bfec04f949149d89a5a870,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11209950923185052, guid: 93bf78af47bfec04f949149d89a5a870,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 375131771426544284, guid: 93bf78af47bfec04f949149d89a5a870,
@@ -4677,7 +4737,7 @@ PrefabInstance:
     - target: {fileID: 375131771426544287, guid: 93bf78af47bfec04f949149d89a5a870,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1215
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 375131771426544287, guid: 93bf78af47bfec04f949149d89a5a870,
         type: 3}
@@ -8332,7 +8392,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2066.079, y: -24.948975}
+  m_AnchoredPosition: {x: -2066.079, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &96597583923481234
@@ -8386,7 +8446,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &96597583923481237
 Canvas:
   m_ObjectHideFlags: 0
@@ -8419,7 +8479,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 96597583923481263}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b0d71f0b05837841878ef1150897d70, type: 3}
+  m_Script: {fileID: 11500000, guid: 3101137a69689e8448641bc5f343daee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: RoomHudView
@@ -8443,6 +8503,7 @@ MonoBehaviour:
   OnHideFinishedEvent:
     m_PersistentCalls:
       m_Calls: []
+  HealthText: {fileID: 67618142}
 --- !u!1 &96597583923481263
 GameObject:
   m_ObjectHideFlags: 0
@@ -8894,7 +8955,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 15}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 800, y: 45}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &96597585350784062
@@ -9118,7 +9179,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 15, y: -15}
+  m_AnchoredPosition: {x: 15, y: 0}
   m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &8973542011617613411
