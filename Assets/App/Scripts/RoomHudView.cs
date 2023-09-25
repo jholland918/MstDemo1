@@ -21,6 +21,9 @@ namespace Assets.App.Scripts
 
         private void OnLocalCharacterSpawnedEventHandler(PlayerCharacter character)
         {
+            var playerCharacterVitals = character.GetComponent<PlayerCharacterVitals>();
+            HealthText.text = playerCharacterVitals.Health.ToString();
+
             // TODO: Experiment when characters get respawned to see if we really need all this logic. Maybe this logic can be simplified.
             if (character == _character)
             {
@@ -38,7 +41,7 @@ namespace Assets.App.Scripts
 
             // Just do simple initialization here since previous cleanup has been taken care of above.
             _character = character;
-            _playerCharacterVitals = _character.GetComponent<PlayerCharacterVitals>();
+            _playerCharacterVitals = playerCharacterVitals;
             _playerCharacterVitals.OnVitalChangedEvent += OnVitalChangedEventHandler;
             _playerCharacterVitals.OnDieEvent += OnDieEventHandler;
         }
