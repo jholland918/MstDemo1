@@ -31,6 +31,19 @@
 		NEW: 3101137a69689e8448641bc5f343daee (changes each time it's copied btw)
 	*   Change namespace to `Assets.App.Scripts`
 	*   Add HealthText ref from hierarchy to script property in inspector
+8.  Create Die Effect Prefab
+	*   Open Sample Scene
+	*   Create new game object, name it "DieEffect"
+	*   Add new cylinder, Scale x 0.1, y 2.0, z 0.1
+	*   Change cylinder Mesh Renderer > Material: Orange
+	    *   Duplicate the cylinder three times so there is 4 of them
+	    *   Rotate them around to make an asterisk looking shape
+		*   Place the 4 cylinders into a "Group1" container and duplicate the container
+		*   Rotate the duplicated container to make an "asterisk ball" look.
+		*   Make the Transform Postion: x 0, y 1, z 0
+	*   Drag the "DieEffect" into the /App/Prefabs directory, then delete it from the SampleScene
+	*   Add DieEffect prefab to FpsCharacter prefab > Player Character Vitals > Die Effect Prefab
+	*   Fix FpsCharacter refs inside App/Data/Demo SinglePrefabsObjects & Room/--PLAYER_SPAWNER...
 8.  ???
 9.  Profit!!
 
