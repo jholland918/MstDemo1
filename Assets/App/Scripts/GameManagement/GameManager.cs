@@ -1,30 +1,34 @@
 using MasterServerToolkit.MasterServer;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.App.Scripts.Lobbies
+namespace Assets.App.Scripts.GameManagement
 {
     /// <summary>
-    /// Controls the time limit for a game match and stops the game when time is up.
+    /// Manages the state of a multiplayer game
     /// </summary>
-    public class MatchTimer : MonoBehaviour
+    public class GameManager : MonoBehaviour
     {
         public int MatchTimeSeconds = 300;
 
         private RoomServerManager _roomManager;
         private RoomController _roomController;
+        private LobbyDataPacket _lobbyInfo;
+        private BaseGameHandler _gameHandler;
 
         private void Awake()
         {
-            Debug.Log("MatchTimer:Awake");
+            Debug.Log("GameManager:Awake");
             _roomManager = GetComponent<RoomServerManager>();
             _roomManager.OnRoomRegisteredEvent.AddListener(OnRoomRegistered);
         }
 
         void Start()
         {
-            Debug.Log("MatchTimer:Start");
-            StartCoroutine("Countdown", MatchTimeSeconds);
+            Debug.Log("GameManager:Start");
+            StartCoroutine(nameof(Countdown), MatchTimeSeconds);
         }
 
         private IEnumerator Countdown(int time)
@@ -32,10 +36,10 @@ namespace Assets.App.Scripts.Lobbies
             while (time > 0)
             {
                 time--;
-                //Debug.Log($"MatchTimer:Countdown:{time}");
+                //Debug.Log($"GameManager:Countdown:{time}");
                 yield return new WaitForSeconds(1);
             }
-            Debug.Log("MatchTimer:Countdown Complete!");
+            Debug.Log("GameManager:Countdown Complete!");
             StopGame();
         }
 
@@ -48,7 +52,7 @@ namespace Assets.App.Scripts.Lobbies
         /// </remarks>
         private void StopGame()
         {
-            Debug.Log("MatchTimer:StopGame");
+            Debug.Log("GameManager:StopGame");
 
             // Destroying the room will clean up and reset various states in the game, finally setting the 
             // LobbyState to LobbyState.Preparations, which will trigger an event handler to load the "Client" scene,
@@ -63,8 +67,35 @@ namespace Assets.App.Scripts.Lobbies
 
         private void OnRoomRegistered(RoomController roomController)
         {
-            Debug.Log("MatchTimer:OnRoomRegistered");
+            Debug.Log("GameManager:OnRoomRegistered");
             _roomController = roomController;
+
+            Mst.Server.Lobbies.GetLobbyInfo(Mst.Args.LobbyId, (info, error) =>
+            {
+                if (!string.IsNullOrEmpty(error))
+                {
+                    Debug.Log($"GameManager:GetLobbyInfo error: {error}");
+                    return;
+                }
+
+                _lobbyInfo = info;
+
+                switch (_lobbyInfo.LobbyName)
+                {
+                    case "Survival":
+                        _gameHandler = new SurvivalGameHandler(_lobbyInfo);
+                        break;
+                    case "TwoVsTwo":
+                        _gameHandler = new TwoVsTwoGameHandler(_lobbyInfo);
+                        break;
+                    case "OneVsOne":
+                        _gameHandler = new OneVsOneGameHandler(_lobbyInfo);
+                        break;
+                    default:
+                        Debug.Log($"Unhandled LobbyName: {_lobbyInfo.LobbyName}");
+                        break;
+                }
+            });
         }
     }
 }

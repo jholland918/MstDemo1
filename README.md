@@ -44,7 +44,10 @@
 	*   Drag the "DieEffect" into the /App/Prefabs directory, then delete it from the SampleScene
 	*   Add DieEffect prefab to FpsCharacter prefab > Player Character Vitals > Die Effect Prefab
 	*   Fix FpsCharacter refs inside App/Data/Demo SinglePrefabsObjects & Room/--PLAYER_SPAWNER...
-8.  ???
+8.  Create GameManager script inside App/Scripts/GameManagement
+	*   Copy logic from MatchTimer into GameManager and delete MatchTimer
+	*   Attach GameManager to Room//--ROOM_SERVER
+	*   Add game handlers to GameManagement namespace...
 9.  Profit!!
 
 ## Reference Cleanup (WIP)
