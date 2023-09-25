@@ -1,6 +1,7 @@
 using Assets.App.Scripts.Character;
 using MasterServerToolkit.MasterServer;
 using MasterServerToolkit.UI;
+using System;
 using TMPro;
 
 namespace Assets.App.Scripts
@@ -32,12 +33,19 @@ namespace Assets.App.Scripts
             {
                 // This is a subsequent time we're assigning event handlers, clean up previous handlers so we don't over subscribe
                 _playerCharacterVitals.OnVitalChangedEvent -= OnVitalChangedEventHandler;
+                _playerCharacterVitals.OnDieEvent -= OnDieEventHandler;
             }
 
             // Just do simple initialization here since previous cleanup has been taken care of above.
             _character = character;
             _playerCharacterVitals = _character.GetComponent<PlayerCharacterVitals>();
             _playerCharacterVitals.OnVitalChangedEvent += OnVitalChangedEventHandler;
+            _playerCharacterVitals.OnDieEvent += OnDieEventHandler;
+        }
+
+        private void OnDieEventHandler()
+        {
+            HealthText.text = "You died!";
         }
 
         private void OnVitalChangedEventHandler(short key, float value)

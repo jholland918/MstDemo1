@@ -50,6 +50,11 @@ namespace Assets.App.Scripts.Character
         {
             Health -= hitPoints;
             NotifyVitalChanged((short)PlayerVitalsKey.Health, Health);
+
+            if (Health <= 0)
+            {
+                NotifyDied();
+            }
         }
         #endregion MstDemo1 Changes
 
