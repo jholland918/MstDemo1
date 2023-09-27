@@ -1,10 +1,10 @@
-using MasterServerToolkit.Bridges.FishNetworking.Character;
+//using MasterServerToolkit.Bridges.FishNetworking.Character;
+using Assets.App.Scripts.Character;
 using MasterServerToolkit.MasterServer;
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using PlayerCharacter = Assets.App.Scripts.Character.PlayerCharacter;
 
 namespace Assets.App.Scripts.GameManagement
 {
@@ -150,7 +150,11 @@ namespace Assets.App.Scripts.GameManagement
                 PlayerCharacters.Add(id, character);
             }
 
+            Debug.Log("Getting vitals...");
+
             var vitals = character.GetComponent<PlayerCharacterVitals>();
+
+            // These events don't seem to be firing...
             vitals.OnAliveEvent += () => PlayerCharacterVitals_OnAliveEvent(vitals);
             vitals.OnDieEvent += () => PlayerCharacterVitals_OnDieEvent(vitals);
         }
