@@ -1,8 +1,10 @@
+using MasterServerToolkit.Bridges.FishNetworking.Character;
 using MasterServerToolkit.MasterServer;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PlayerCharacter = Assets.App.Scripts.Character.PlayerCharacter;
 
 namespace Assets.App.Scripts.GameManagement
 {
@@ -13,16 +15,20 @@ namespace Assets.App.Scripts.GameManagement
     {
         public int MatchTimeSeconds = 300;
 
-        private RoomServerManager _roomManager;
         private RoomController _roomController;
         private LobbyDataPacket _lobbyInfo;
         private BaseGameHandler _gameHandler;
+        private RoomOptions _roomOptions;
+
+        protected Dictionary<int, RoomPlayer> RoomPlayers = new();
+        protected Dictionary<int, PlayerCharacter> PlayerCharacters = new();
 
         private void Awake()
         {
             Debug.Log("GameManager:Awake");
-            _roomManager = GetComponent<RoomServerManager>();
-            _roomManager.OnRoomRegisteredEvent.AddListener(OnRoomRegistered);
+
+            PlayerCharacter.OnServerCharacterSpawnedEvent += PlayerCharacter_OnServerCharacterSpawned;
+            PlayerCharacter.OnCharacterDestroyedEvent += PlayerCharacter_OnCharacterDestroyed;
         }
 
         void Start()
@@ -65,9 +71,14 @@ namespace Assets.App.Scripts.GameManagement
             _roomController.Connection.Close();
         }
 
-        private void OnRoomRegistered(RoomController roomController)
+        public void RoomServerManager_OnBeforeRoomRegister(RoomOptions roomOptions)
         {
-            Debug.Log("GameManager:OnRoomRegistered");
+            _roomOptions = roomOptions;
+        }
+
+        public void RoomServerManager_OnRoomRegistered(RoomController roomController)
+        {
+            Debug.Log("GameManager:RoomServerManager_OnRoomRegistered");
             _roomController = roomController;
 
             Mst.Server.Lobbies.GetLobbyInfo(Mst.Args.LobbyId, (info, error) =>
@@ -80,22 +91,98 @@ namespace Assets.App.Scripts.GameManagement
 
                 _lobbyInfo = info;
 
-                switch (_lobbyInfo.LobbyName)
+                string lobbyFactoryId = _lobbyInfo.LobbyProperties[MstDictKeys.LOBBY_FACTORY_ID];
+                switch (lobbyFactoryId)
                 {
                     case "Survival":
+                        Debug.Log("Setting Survival game handler...");
                         _gameHandler = new SurvivalGameHandler(_lobbyInfo);
                         break;
                     case "TwoVsTwo":
+                        Debug.Log("Setting TwoVsTwo game handler...");
                         _gameHandler = new TwoVsTwoGameHandler(_lobbyInfo);
                         break;
                     case "OneVsOne":
+                        Debug.Log("Setting OneVsOne game handler...");
                         _gameHandler = new OneVsOneGameHandler(_lobbyInfo);
                         break;
                     default:
-                        Debug.Log($"Unhandled LobbyName: {_lobbyInfo.LobbyName}");
+                        Debug.Log($"Unhandled lobbyFactoryId [{lobbyFactoryId}]");
                         break;
                 }
             });
+        }
+
+        public void RoomServerManager_OnPlayerJoinedRoom(RoomPlayer roomPlayer)
+        {
+            Debug.Log($"roomPlayer.RoomPeerId[{roomPlayer.RoomPeerId}]");
+
+            int id = roomPlayer.RoomPeerId;
+            if (RoomPlayers.ContainsKey(id))
+            {
+                RoomPlayers[id] = roomPlayer;
+            }
+            else
+            {
+                RoomPlayers.Add(id, roomPlayer);
+            }
+        }
+
+        public void RoomServerManager_OnPlayerLeftRoom(RoomPlayer roomPlayer)
+        {
+            Debug.Log($"roomPlayer.RoomPeerId[{roomPlayer.RoomPeerId}]");
+
+            if (RoomPlayers.ContainsKey(roomPlayer.RoomPeerId))
+            {
+                RoomPlayers.Remove(roomPlayer.RoomPeerId);
+            }
+        }
+
+        private void PlayerCharacter_OnServerCharacterSpawned(PlayerCharacter character)
+        {
+            int id = character.NetworkObject.OwnerId;
+            if (PlayerCharacters.ContainsKey(id))
+            {
+                PlayerCharacters[id] = character;
+            }
+            else
+            {
+                PlayerCharacters.Add(id, character);
+            }
+
+            var vitals = character.GetComponent<PlayerCharacterVitals>();
+            vitals.OnAliveEvent += () => PlayerCharacterVitals_OnAliveEvent(vitals);
+            vitals.OnDieEvent += () => PlayerCharacterVitals_OnDieEvent(vitals);
+        }
+
+        private void PlayerCharacterVitals_OnDieEvent(PlayerCharacterVitals playerCharacterVitals)
+        {
+            Debug.Log("PlayerCharacterVitals_OnDieEvent!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
+
+        private void PlayerCharacterVitals_OnAliveEvent(PlayerCharacterVitals playerCharacterVitals)
+        {
+        }
+
+        private void PlayerCharacter_OnCharacterDestroyed(PlayerCharacter character)
+        {
+            Debug.Log($"OnCharacterDestroyed:OwnerId[{character.NetworkObject.OwnerId}]");
+            if (PlayerCharacters.ContainsKey(character.NetworkObject.OwnerId))
+            {
+                PlayerCharacters.Remove(character.NetworkObject.OwnerId);
+            }
+        }
+
+        public PlayerCharacter FindPlayerCharacter(RoomPlayer roomPlayer)
+        {
+            PlayerCharacters.TryGetValue(roomPlayer.RoomPeerId, out PlayerCharacter playerCharacter);
+            return playerCharacter;
+        }
+
+        public RoomPlayer FindRoomPlayer(PlayerCharacter playerCharacter)
+        {
+            RoomPlayers.TryGetValue(playerCharacter.NetworkObject.OwnerId, out RoomPlayer roomPlayer);
+            return roomPlayer;
         }
     }
 }

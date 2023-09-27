@@ -46,7 +46,8 @@
 	*   Fix FpsCharacter refs inside App/Data/Demo SinglePrefabsObjects & Room/--PLAYER_SPAWNER...
 8.  Create GameManager script inside App/Scripts/GameManagement
 	*   Copy logic from MatchTimer into GameManager and delete MatchTimer
-	*   Attach GameManager to Room//--ROOM_SERVER
+	*   Create new --GAME_MANAGER object in Hierarchy and attach GameManager.cs to it
+	    *    --GAME_MANAGER event handlers to --ROOM_SERVER/RoomServerManager events (4 of them, room before reg and reg, player join/left)...
 	*   Add game handlers to GameManagement namespace...
 9.  Profit!!
 

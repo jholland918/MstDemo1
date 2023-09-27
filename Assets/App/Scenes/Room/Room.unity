@@ -834,7 +834,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -90}
+  m_AnchoredPosition: {x: 20, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &67618142
@@ -1264,6 +1264,51 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &128079890
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 128079892}
+  - component: {fileID: 128079891}
+  m_Layer: 0
+  m_Name: --GAME_MANAGER
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &128079891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128079890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a2735e2011f55b499a7a776a94351ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MatchTimeSeconds: 300
+--- !u!4 &128079892
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128079890}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 361.9742, y: 119.71467, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &164573919
 GameObject:
   m_ObjectHideFlags: 0
@@ -2140,7 +2185,32 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
         type: 3}
+      propertyPath: OnPlayerLeftRoomEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnRoomRegisteredEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
       propertyPath: OnPlayerJoinedRoomEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnBeforeRoomRegisterEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnPlayerLeftRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnRoomRegisteredEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
@@ -2150,9 +2220,49 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
         type: 3}
+      propertyPath: OnPlayerLeftRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 128079891}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnRoomRegisteredEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 128079891}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnBeforeRoomRegisterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
       propertyPath: OnPlayerJoinedRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 96597583923481238}
+      objectReference: {fileID: 128079891}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnPlayerLeftRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnRoomRegisteredEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnBeforeRoomRegisterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 128079891}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnPlayerLeftRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RoomServerManager_OnPlayerLeftRoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnRoomRegisteredEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RoomServerManager_OnRoomRegistered
+      objectReference: {fileID: 0}
     - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
         type: 3}
       propertyPath: OnPlayerJoinedRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -2161,16 +2271,56 @@ PrefabInstance:
     - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
         type: 3}
       propertyPath: OnPlayerJoinedRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnPlayerJoinedRoom
+      value: RoomServerManager_OnPlayerJoinedRoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnBeforeRoomRegisterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnBeforeRoomRegisterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: RoomServerManager_OnBeforeRoomRegister
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnPlayerLeftRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Assets.App.Scripts.GameManagement.GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnRoomRegisteredEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Assets.App.Scripts.GameManagement.GameManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
         type: 3}
       propertyPath: OnPlayerJoinedRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Assets.App.Scripts.RoomHudView, Assembly-CSharp
+      value: Assets.App.Scripts.GameManagement.GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnBeforeRoomRegisterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Assets.App.Scripts.GameManagement.GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnPlayerLeftRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnRoomRegisteredEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
         type: 3}
       propertyPath: OnPlayerJoinedRoomEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182598396324832459, guid: c3de8d202f590fc4c980a357203c6161,
+        type: 3}
+      propertyPath: OnBeforeRoomRegisterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1182598396324832461, guid: c3de8d202f590fc4c980a357203c6161,

@@ -9,7 +9,8 @@ namespace Assets.App.Scripts.GameManagement
 {
     internal class SurvivalGameHandler : BaseGameHandler
     {
-        public SurvivalGameHandler(LobbyDataPacket lobbyInfo) : base(lobbyInfo)
+        public SurvivalGameHandler(LobbyDataPacket lobbyInfo) 
+            : base(lobbyInfo)
         {
         }
 
