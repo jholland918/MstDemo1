@@ -12,6 +12,8 @@ namespace Assets.App.Scripts.Character
 
     public class PlayerCharacterVitals : PlayerCharacterBehaviour
     {
+        public static event Action<PlayerCharacterVitals> OnServerCharacterDieEvent;
+
         #region INSPECTOR
 
         [Header("Components"), SerializeField]
@@ -113,6 +115,7 @@ namespace Assets.App.Scripts.Character
 
                 IsAlive = false;
                 Rpc_NotifyDied();
+                OnServerCharacterDieEvent?.Invoke(this);
             }
         }
 

@@ -45,17 +45,17 @@ namespace Assets.App.Scripts.GameManagement
             {
                 PlayerCharacters.Add(playerCharacter);
                 var playerCharacterVitals = playerCharacter.GetComponent<PlayerCharacterVitals>();
-                playerCharacterVitals.OnDieEvent += () => PlayerCharacterVitals_OnDieEvent(playerCharacter);
-                playerCharacterVitals.OnAliveEvent += () => PlayerCharacterVitals_OnAliveEvent(playerCharacter);
+                //playerCharacterVitals.OnDieEvent += PlayerCharacterVitals_OnDieEvent;
+                //playerCharacterVitals.OnAliveEvent += PlayerCharacterVitals_OnAliveEvent;
             }
         }
 
-        private void PlayerCharacter_OnCharacterDestroyedEvent(PlayerCharacter playerCharacter)
-        {
-            if (PlayerCharacters.Contains(playerCharacter))
-            {
-                PlayerCharacters.Remove(playerCharacter);
-            }
-        }
+        //private void PlayerCharacter_OnCharacterDestroyedEvent(PlayerCharacterVitals playerCharacter)
+        //{
+        //    if (PlayerCharacters.Contains(playerCharacter))
+        //    {
+        //        PlayerCharacters.Remove(playerCharacter);
+        //    }
+        //}
     }
 }

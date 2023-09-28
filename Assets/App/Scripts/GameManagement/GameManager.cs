@@ -1,6 +1,7 @@
 //using MasterServerToolkit.Bridges.FishNetworking.Character;
 using Assets.App.Scripts.Character;
 using MasterServerToolkit.MasterServer;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,12 @@ namespace Assets.App.Scripts.GameManagement
 
             PlayerCharacter.OnServerCharacterSpawnedEvent += PlayerCharacter_OnServerCharacterSpawned;
             PlayerCharacter.OnCharacterDestroyedEvent += PlayerCharacter_OnCharacterDestroyed;
+            PlayerCharacterVitals.OnServerCharacterDieEvent += PlayerCharacterVitals_OnServerCharacterDieEvent;
+        }
+
+        private void PlayerCharacterVitals_OnServerCharacterDieEvent(PlayerCharacterVitals playerCharacterVitals)
+        {
+            Debug.Log("*** OnServerCharacterDieEvent ***");
         }
 
         void Start()
@@ -149,23 +156,6 @@ namespace Assets.App.Scripts.GameManagement
             {
                 PlayerCharacters.Add(id, character);
             }
-
-            Debug.Log("Getting vitals...");
-
-            var vitals = character.GetComponent<PlayerCharacterVitals>();
-
-            // These events don't seem to be firing...
-            vitals.OnAliveEvent += () => PlayerCharacterVitals_OnAliveEvent(vitals);
-            vitals.OnDieEvent += () => PlayerCharacterVitals_OnDieEvent(vitals);
-        }
-
-        private void PlayerCharacterVitals_OnDieEvent(PlayerCharacterVitals playerCharacterVitals)
-        {
-            Debug.Log("PlayerCharacterVitals_OnDieEvent!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        }
-
-        private void PlayerCharacterVitals_OnAliveEvent(PlayerCharacterVitals playerCharacterVitals)
-        {
         }
 
         private void PlayerCharacter_OnCharacterDestroyed(PlayerCharacter character)
