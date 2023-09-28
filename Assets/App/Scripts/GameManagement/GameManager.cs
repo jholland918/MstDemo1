@@ -30,12 +30,7 @@ namespace Assets.App.Scripts.GameManagement
 
             PlayerCharacter.OnServerCharacterSpawnedEvent += PlayerCharacter_OnServerCharacterSpawned;
             PlayerCharacter.OnCharacterDestroyedEvent += PlayerCharacter_OnCharacterDestroyed;
-            PlayerCharacterVitals.OnServerCharacterDieEvent += PlayerCharacterVitals_OnServerCharacterDieEvent;
-        }
-
-        private void PlayerCharacterVitals_OnServerCharacterDieEvent(PlayerCharacterVitals playerCharacterVitals)
-        {
-            Debug.Log("*** OnServerCharacterDieEvent ***");
+            
         }
 
         void Start()
