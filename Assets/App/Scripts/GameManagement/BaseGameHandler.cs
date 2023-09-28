@@ -1,13 +1,7 @@
 ﻿using Assets.App.Scripts.Character;
 using MasterServerToolkit.Logging;
 using MasterServerToolkit.MasterServer;
-using MongoDB.Bson.IO;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assets.App.Scripts.GameManagement
 {
@@ -22,9 +16,15 @@ namespace Assets.App.Scripts.GameManagement
             _lobbyInfo = lobbyInfo;
 
             PlayerCharacterVitals.OnServerCharacterDieEvent += PlayerCharacterVitals_OnServerCharacterDieEvent;
+            PlayerCharacterVitals.OnServerCharacterAliveEvent += PlayerCharacterVitals_OnServerCharacterAliveEvent;
         }
 
-        protected virtual void PlayerCharacterVitals_OnServerCharacterDieEvent(PlayerCharacterVitals vitals)
+        protected virtual void PlayerCharacterVitals_OnServerCharacterAliveEvent(PlayerCharacterVitals characterVitals)
+        {
+            _logger.Debug("*** OnServerCharacterAliveEvent ***");
+        }
+
+        protected virtual void PlayerCharacterVitals_OnServerCharacterDieEvent(PlayerCharacterVitals characterVitals)
         {
             _logger.Debug("*** OnServerCharacterDieEvent ***");
         }

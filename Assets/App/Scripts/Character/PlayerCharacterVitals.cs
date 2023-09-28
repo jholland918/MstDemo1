@@ -13,6 +13,7 @@ namespace Assets.App.Scripts.Character
     public class PlayerCharacterVitals : PlayerCharacterBehaviour
     {
         public static event Action<PlayerCharacterVitals> OnServerCharacterDieEvent;
+        public static event Action<PlayerCharacterVitals> OnServerCharacterAliveEvent;
 
         #region INSPECTOR
 
@@ -91,6 +92,7 @@ namespace Assets.App.Scripts.Character
             {
                 IsAlive = true;
                 Rpc_NotifyAlive();
+                OnServerCharacterAliveEvent?.Invoke(this);
             }
         }
 
