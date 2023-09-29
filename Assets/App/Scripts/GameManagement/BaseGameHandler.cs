@@ -7,26 +7,26 @@ namespace Assets.App.Scripts.GameManagement
 {
     internal abstract class BaseGameHandler
     {
-        protected readonly LobbyDataPacket _lobbyInfo;
-        protected readonly List<PlayerCharacter> PlayerCharacters = new List<PlayerCharacter>();
-        private Logger _logger = Mst.Create.Logger("BaseGameHandler");
+        protected readonly GameManager _gameManager;
+        protected Dictionary<int, PlayerCharacter> PlayerCharacters => _gameManager.PlayerCharacters;
+        private Logger _log = Mst.Create.Logger("BaseGameHandler");
 
-        protected BaseGameHandler(LobbyDataPacket lobbyInfo) 
+        protected BaseGameHandler(GameManager gameManager)
         {
-            _lobbyInfo = lobbyInfo;
+            _gameManager = gameManager;
 
-            PlayerCharacterVitals.OnServerCharacterDieEvent += PlayerCharacterVitals_OnServerCharacterDieEvent;
-            PlayerCharacterVitals.OnServerCharacterAliveEvent += PlayerCharacterVitals_OnServerCharacterAliveEvent;
+            PlayerCharacterVitals.OnServerCharacterDieEvent += OnCharacterDie;
+            PlayerCharacterVitals.OnServerCharacterAliveEvent += OnCharacterAlive;
         }
 
-        protected virtual void PlayerCharacterVitals_OnServerCharacterAliveEvent(PlayerCharacterVitals characterVitals)
+        protected virtual void OnCharacterAlive(PlayerCharacterVitals characterVitals)
         {
-            _logger.Debug("*** OnServerCharacterAliveEvent ***");
+            _log.Debug("*** OnCharacterAlive ***");
         }
 
-        protected virtual void PlayerCharacterVitals_OnServerCharacterDieEvent(PlayerCharacterVitals characterVitals)
+        protected virtual void OnCharacterDie(PlayerCharacterVitals characterVitals)
         {
-            _logger.Debug("*** OnServerCharacterDieEvent ***");
+            _log.Debug("*** OnCharacterDie ***");
         }
     }
 }

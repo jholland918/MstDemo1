@@ -1,10 +1,8 @@
 //using MasterServerToolkit.Bridges.FishNetworking.Character;
 using Assets.App.Scripts.Character;
 using MasterServerToolkit.MasterServer;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Assets.App.Scripts.GameManagement
@@ -22,7 +20,7 @@ namespace Assets.App.Scripts.GameManagement
         private RoomOptions _roomOptions;
 
         protected Dictionary<int, RoomPlayer> RoomPlayers = new();
-        protected Dictionary<int, PlayerCharacter> PlayerCharacters = new();
+        public Dictionary<int, PlayerCharacter> PlayerCharacters { get; } = new();
 
         private void Awake()
         {
@@ -30,7 +28,6 @@ namespace Assets.App.Scripts.GameManagement
 
             PlayerCharacter.OnServerCharacterSpawnedEvent += PlayerCharacter_OnServerCharacterSpawned;
             PlayerCharacter.OnCharacterDestroyedEvent += PlayerCharacter_OnCharacterDestroyed;
-            
         }
 
         void Start()
@@ -98,15 +95,15 @@ namespace Assets.App.Scripts.GameManagement
                 {
                     case "Survival":
                         Debug.Log("Setting Survival game handler...");
-                        _gameHandler = new SurvivalGameHandler(_lobbyInfo);
+                        _gameHandler = new SurvivalGameHandler(this);
                         break;
                     case "TwoVsTwo":
                         Debug.Log("Setting TwoVsTwo game handler...");
-                        _gameHandler = new TwoVsTwoGameHandler(_lobbyInfo);
+                        _gameHandler = new TwoVsTwoGameHandler(this);
                         break;
                     case "OneVsOne":
                         Debug.Log("Setting OneVsOne game handler...");
-                        _gameHandler = new OneVsOneGameHandler(_lobbyInfo);
+                        _gameHandler = new OneVsOneGameHandler(this);
                         break;
                     default:
                         Debug.Log($"Unhandled lobbyFactoryId [{lobbyFactoryId}]");

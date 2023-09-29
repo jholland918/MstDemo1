@@ -9,8 +9,8 @@ namespace Assets.App.Scripts.GameManagement
 {
     internal class TwoVsTwoGameHandler : BaseGameHandler
     {
-        public TwoVsTwoGameHandler(LobbyDataPacket lobbyInfo) 
-            : base(lobbyInfo)
+        public TwoVsTwoGameHandler(GameManager gameManager) 
+            : base(gameManager)
         {
         }
     }
