@@ -1,4 +1,3 @@
-//using MasterServerToolkit.Bridges.FishNetworking.Character;
 using Assets.App.Scripts.Character;
 using MasterServerToolkit.MasterServer;
 using System.Collections;
@@ -10,21 +9,35 @@ namespace Assets.App.Scripts.GameManagement
     /// <summary>
     /// Manages the state of a multiplayer game
     /// </summary>
+    [RequireComponent(typeof(SurvivalGameHandler))]
+    [RequireComponent(typeof(TwoVsTwoGameHandler))]
+    [RequireComponent(typeof(OneVsOneGameHandler))]
     public class GameManager : MonoBehaviour
     {
         public int MatchTimeSeconds = 300;
 
+        public Dictionary<int, RoomPlayer> RoomPlayers;
+        public Dictionary<int, PlayerCharacter> PlayerCharacters;
+
+        private Dictionary<string, BaseGameHandler> _gameHandlers;
         private RoomController _roomController;
         private LobbyDataPacket _lobbyInfo;
         private BaseGameHandler _gameHandler;
         private RoomOptions _roomOptions;
 
-        protected Dictionary<int, RoomPlayer> RoomPlayers = new();
-        public Dictionary<int, PlayerCharacter> PlayerCharacters { get; } = new();
-
         private void Awake()
         {
             Debug.Log("GameManager:Awake");
+
+            RoomPlayers = new Dictionary<int, RoomPlayer>();
+            PlayerCharacters = new Dictionary<int, PlayerCharacter>();
+
+            _gameHandlers = new Dictionary<string, BaseGameHandler>
+            {
+                ["Survival"] = GetComponent<SurvivalGameHandler>(),
+                ["OneVsOne"] = GetComponent<OneVsOneGameHandler>(),
+                ["TwoVsTwo"] = GetComponent<TwoVsTwoGameHandler>()
+            };
 
             PlayerCharacter.OnServerCharacterSpawnedEvent += PlayerCharacter_OnServerCharacterSpawned;
             PlayerCharacter.OnCharacterDestroyedEvent += PlayerCharacter_OnCharacterDestroyed;
@@ -91,23 +104,19 @@ namespace Assets.App.Scripts.GameManagement
                 _lobbyInfo = info;
 
                 string lobbyFactoryId = _lobbyInfo.LobbyProperties[MstDictKeys.LOBBY_FACTORY_ID];
-                switch (lobbyFactoryId)
+
+                // Set the active game handler and destroy the rest
+                foreach (KeyValuePair<string, BaseGameHandler> kvp in _gameHandlers)
                 {
-                    case "Survival":
-                        Debug.Log("Setting Survival game handler...");
-                        _gameHandler = new SurvivalGameHandler(this);
-                        break;
-                    case "TwoVsTwo":
-                        Debug.Log("Setting TwoVsTwo game handler...");
-                        _gameHandler = new TwoVsTwoGameHandler(this);
-                        break;
-                    case "OneVsOne":
-                        Debug.Log("Setting OneVsOne game handler...");
-                        _gameHandler = new OneVsOneGameHandler(this);
-                        break;
-                    default:
-                        Debug.Log($"Unhandled lobbyFactoryId [{lobbyFactoryId}]");
-                        break;
+                    if (kvp.Key == lobbyFactoryId)
+                    {
+                        _gameHandler = kvp.Value;
+                    }
+                    else
+                    {
+                        kvp.Value.enabled = false;
+                        Destroy(kvp.Value);
+                    }
                 }
             });
         }

@@ -1,19 +1,20 @@
 ﻿using Assets.App.Scripts.Character;
-using MasterServerToolkit.Logging;
 using MasterServerToolkit.MasterServer;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.App.Scripts.GameManagement
 {
-    internal abstract class BaseGameHandler
+    internal abstract class BaseGameHandler : MonoBehaviour
     {
-        protected readonly GameManager _gameManager;
+        protected GameManager _gameManager;
         protected Dictionary<int, PlayerCharacter> PlayerCharacters => _gameManager.PlayerCharacters;
-        private Logger _log = Mst.Create.Logger("BaseGameHandler");
+        private MasterServerToolkit.Logging.Logger _log;
 
-        protected BaseGameHandler(GameManager gameManager)
+        protected void Awake()
         {
-            _gameManager = gameManager;
+            _log = Mst.Create.Logger("BaseGameHandler");
+            _gameManager = GetComponent<GameManager>();
 
             PlayerCharacterVitals.OnServerCharacterDieEvent += OnCharacterDie;
             PlayerCharacterVitals.OnServerCharacterAliveEvent += OnCharacterAlive;

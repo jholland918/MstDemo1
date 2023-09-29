@@ -1,26 +1,22 @@
 ﻿using Assets.App.Scripts.Character;
 using MasterServerToolkit.Logging;
 using MasterServerToolkit.MasterServer;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assets.App.Scripts.GameManagement
 {
     internal class SurvivalGameHandler : BaseGameHandler
     {
-        private Logger _log = Mst.Create.Logger(nameof(SurvivalGameHandler));
+        private Logger _log;
 
-        private List<int> _deadCharacters = new List<int>();
+        private List<int> _deadCharacters = new();
 
-        public SurvivalGameHandler(GameManager gameManager) 
-            : base(gameManager)
+        protected void Awake()
         {
+            base.Awake();
+            _log = Mst.Create.Logger("SurvivalGameHandler");
         }
-
-        // TODO: End game on last-player-standing
 
         protected override void OnCharacterAlive(PlayerCharacterVitals characterVitals)
         {
