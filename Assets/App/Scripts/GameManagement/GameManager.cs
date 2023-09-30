@@ -1,4 +1,5 @@
 using Assets.App.Scripts.Character;
+using FishNet.Object;
 using MasterServerToolkit.MasterServer;
 using System;
 using System.Collections;
@@ -10,7 +11,7 @@ namespace Assets.App.Scripts.GameManagement
     /// <summary>
     /// Manages the state of a multiplayer game
     /// </summary>
-    public class GameManager : MonoBehaviour
+    public class GameManager : NetworkBehaviour
     {
         public int MatchTimeSeconds = 300;
 
@@ -44,20 +45,36 @@ namespace Assets.App.Scripts.GameManagement
         void Start()
         {
             Debug.Log("GameManager:Start");
-            StartCoroutine(nameof(Countdown), MatchTimeSeconds);
+            StartCoroutine(nameof(StopGameAfterDelay), MatchTimeSeconds);
         }
 
-        private IEnumerator Countdown(int time)
+        private IEnumerator StopGameAfterDelay(int seconds)
         {
-            while (time > 0)
+            while (seconds > 0)
             {
-                time--;
+                seconds--;
                 //Debug.Log($"GameManager:Countdown:{time}");
                 yield return new WaitForSeconds(1);
             }
             Debug.Log("GameManager:Countdown Complete!");
             StopGame();
         }
+
+        public void OnGameOver(GameResults gameResults)
+        {
+            Debug.Log("GameManager:OnGameOver");
+            Rpc_NotifyGameResults(gameResults);
+            StartCoroutine(nameof(StopGameAfterDelay), 5);
+        }
+
+        [ObserversRpc]
+        private void Rpc_NotifyGameResults(GameResults gameResults)
+        {
+            Debug.Log("GameManager:Rpc_NotifyGameResults");
+            OnGameResults?.Invoke(gameResults);
+        }
+
+        public event Action<GameResults> OnGameResults;
 
         /// <summary>
         /// Stops the match that was started by a client's call to <see cref="JoinedLobby.StartGame(SuccessCallback)"/>
@@ -109,15 +126,15 @@ namespace Assets.App.Scripts.GameManagement
                 {
                     case "Survival":
                         Debug.Log("Using Survival");
-                        _gameHandler = new SurvivalGameHandler(this);
+                        _gameHandler = new SurvivalHandler(this);
                         break;
                     case "OneVsOne":
                         Debug.Log("Using OneVsOne");
-                        _gameHandler = new OneVsOneGameHandler(this);
+                        _gameHandler = new OneVsOneHandler(this);
                         break;
                     case "TwoVsTwo":
                         Debug.Log("Using TwoVsTwo");
-                        _gameHandler = new TwoVsTwoGameHandler(this);
+                        _gameHandler = new TwoVsTwoHandler(this);
                         break;
                     default:
                         Debug.Log("Using NOTHING!!1");

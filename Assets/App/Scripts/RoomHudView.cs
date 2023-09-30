@@ -1,14 +1,20 @@
 using Assets.App.Scripts.Character;
+using Assets.App.Scripts.GameManagement;
 using MasterServerToolkit.MasterServer;
 using MasterServerToolkit.UI;
 using System;
 using TMPro;
+using UnityEngine;
 
 namespace Assets.App.Scripts
 {
     public class RoomHudView : UIView
     {
+        [SerializeField]
+        private GameManager _gameManager;
+
         public TextMeshProUGUI HealthText;
+        public TextMeshProUGUI GameResultsText;
         private PlayerCharacter _character;
         private PlayerCharacterVitals _playerCharacterVitals;
 
@@ -17,6 +23,22 @@ namespace Assets.App.Scripts
             base.Awake();
 
             PlayerCharacter.OnLocalCharacterSpawnedEvent += OnLocalCharacterSpawnedEventHandler;
+            _gameManager.OnGameResults += OnGameResults;
+            GameResultsText.enabled = false;
+        }
+
+        private void OnGameResults(GameResults gameResults)
+        {
+            Debug.Log("RoomHudView:OnGameResults");
+            GameResultsText.enabled = true;
+            GameResultsText.text = "Draw!";
+
+            if (gameResults.PlayerResults.ContainsKey(_character.NetworkObject.OwnerId))
+            {
+                Debug.Log("RoomHudView:OnGameResults:ContainsKey");
+                bool isWinner = gameResults.PlayerResults[_character.NetworkObject.OwnerId];
+                GameResultsText.text = isWinner ? "You Won!" : "You Lost!";
+            }
         }
 
         private void OnLocalCharacterSpawnedEventHandler(PlayerCharacter character)

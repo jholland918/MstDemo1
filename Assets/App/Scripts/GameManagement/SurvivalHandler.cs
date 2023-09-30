@@ -6,20 +6,15 @@ using System.Linq;
 
 namespace Assets.App.Scripts.GameManagement
 {
-    internal class SurvivalGameHandler : BaseGameHandler
+    internal class SurvivalHandler : BaseGameHandler
     {
         private Logger _log = Mst.Create.Logger("SurvivalGameHandler");
 
         private List<int> _deadCharacters = new();
 
-        public SurvivalGameHandler(GameManager gameManager) 
+        public SurvivalHandler(GameManager gameManager) 
             : base(gameManager)
         {
-        }
-
-        public override void OnCharacterAlive(PlayerCharacterVitals characterVitals)
-        {
-            _log.Debug("*** OnCharacterAlive ***");
         }
 
         public override void OnCharacterDie(PlayerCharacterVitals characterVitals)
@@ -29,7 +24,18 @@ namespace Assets.App.Scripts.GameManagement
             var aliveCharacters = PlayerCharacters.Where(kvp => !_deadCharacters.Contains(kvp.Key));
             if (aliveCharacters.Count() == 1)
             {
-                _log.Debug("GAME OVER MAN!!11");
+                Dictionary<int, bool> playerResults = new Dictionary<int, bool>();
+
+                foreach (var kvp in PlayerCharacters)
+                {
+                    bool isWinner = aliveCharacters.Any(kvp2 => kvp2.Key == kvp.Key);
+                    playerResults.Add(kvp.Key, isWinner);
+                }
+
+                _gameManager.OnGameOver(new GameResults 
+                {
+                    PlayerResults = playerResults
+                });
             }
         }
     }
