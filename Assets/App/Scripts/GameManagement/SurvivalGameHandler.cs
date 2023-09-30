@@ -8,24 +8,23 @@ namespace Assets.App.Scripts.GameManagement
 {
     internal class SurvivalGameHandler : BaseGameHandler
     {
-        private Logger _log;
+        private Logger _log = Mst.Create.Logger("SurvivalGameHandler");
 
         private List<int> _deadCharacters = new();
 
-        protected void Awake()
+        public SurvivalGameHandler(GameManager gameManager) 
+            : base(gameManager)
         {
-            base.Awake();
-            _log = Mst.Create.Logger("SurvivalGameHandler");
         }
 
-        protected override void OnCharacterAlive(PlayerCharacterVitals characterVitals)
+        public override void OnCharacterAlive(PlayerCharacterVitals characterVitals)
         {
             _log.Debug("*** OnCharacterAlive ***");
         }
 
-        protected override void OnCharacterDie(PlayerCharacterVitals characterVitals)
+        public override void OnCharacterDie(PlayerCharacterVitals characterVitals)
         {
-            _log.Debug("*** OnCharacterAlive ***");
+            _log.Debug("*** OnCharacterDie ***");
             _deadCharacters.Add(characterVitals.NetworkObject.OwnerId);
             var aliveCharacters = PlayerCharacters.Where(kvp => !_deadCharacters.Contains(kvp.Key));
             if (aliveCharacters.Count() == 1)

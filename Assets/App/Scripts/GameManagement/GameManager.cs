@@ -1,5 +1,6 @@
 using Assets.App.Scripts.Character;
 using MasterServerToolkit.MasterServer;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,9 +10,6 @@ namespace Assets.App.Scripts.GameManagement
     /// <summary>
     /// Manages the state of a multiplayer game
     /// </summary>
-    [RequireComponent(typeof(SurvivalGameHandler))]
-    [RequireComponent(typeof(TwoVsTwoGameHandler))]
-    [RequireComponent(typeof(OneVsOneGameHandler))]
     public class GameManager : MonoBehaviour
     {
         public int MatchTimeSeconds = 300;
@@ -19,7 +17,6 @@ namespace Assets.App.Scripts.GameManagement
         public Dictionary<int, RoomPlayer> RoomPlayers;
         public Dictionary<int, PlayerCharacter> PlayerCharacters;
 
-        private Dictionary<string, BaseGameHandler> _gameHandlers;
         private RoomController _roomController;
         private LobbyDataPacket _lobbyInfo;
         private BaseGameHandler _gameHandler;
@@ -29,19 +26,20 @@ namespace Assets.App.Scripts.GameManagement
         {
             Debug.Log("GameManager:Awake");
 
+            _gameHandler = new BaseGameHandler(this);
+
             RoomPlayers = new Dictionary<int, RoomPlayer>();
             PlayerCharacters = new Dictionary<int, PlayerCharacter>();
 
-            _gameHandlers = new Dictionary<string, BaseGameHandler>
-            {
-                ["Survival"] = GetComponent<SurvivalGameHandler>(),
-                ["OneVsOne"] = GetComponent<OneVsOneGameHandler>(),
-                ["TwoVsTwo"] = GetComponent<TwoVsTwoGameHandler>()
-            };
-
             PlayerCharacter.OnServerCharacterSpawnedEvent += PlayerCharacter_OnServerCharacterSpawned;
             PlayerCharacter.OnCharacterDestroyedEvent += PlayerCharacter_OnCharacterDestroyed;
+            PlayerCharacterVitals.OnServerCharacterDieEvent += OnCharacterDie;
+            PlayerCharacterVitals.OnServerCharacterAliveEvent += OnCharacterAlive;
         }
+
+        private void OnCharacterDie(PlayerCharacterVitals playerCharacterVitals) => _gameHandler.OnCharacterDie(playerCharacterVitals);
+
+        private void OnCharacterAlive(PlayerCharacterVitals playerCharacterVitals) => _gameHandler.OnCharacterAlive(playerCharacterVitals);
 
         void Start()
         {
@@ -105,18 +103,25 @@ namespace Assets.App.Scripts.GameManagement
 
                 string lobbyFactoryId = _lobbyInfo.LobbyProperties[MstDictKeys.LOBBY_FACTORY_ID];
 
-                // Set the active game handler and destroy the rest
-                foreach (KeyValuePair<string, BaseGameHandler> kvp in _gameHandlers)
+                Debug.Log($"lobbyFactoryId:{lobbyFactoryId}");
+
+                switch (lobbyFactoryId)
                 {
-                    if (kvp.Key == lobbyFactoryId)
-                    {
-                        _gameHandler = kvp.Value;
-                    }
-                    else
-                    {
-                        kvp.Value.enabled = false;
-                        Destroy(kvp.Value);
-                    }
+                    case "Survival":
+                        Debug.Log("Using Survival");
+                        _gameHandler = new SurvivalGameHandler(this);
+                        break;
+                    case "OneVsOne":
+                        Debug.Log("Using OneVsOne");
+                        _gameHandler = new OneVsOneGameHandler(this);
+                        break;
+                    case "TwoVsTwo":
+                        Debug.Log("Using TwoVsTwo");
+                        _gameHandler = new TwoVsTwoGameHandler(this);
+                        break;
+                    default:
+                        Debug.Log("Using NOTHING!!1");
+                        break;
                 }
             });
         }

@@ -2,5 +2,9 @@
 {
     internal class TwoVsTwoGameHandler : BaseGameHandler
     {
+        public TwoVsTwoGameHandler(GameManager gameManager) 
+            : base(gameManager)
+        {
+        }
     }
 }
