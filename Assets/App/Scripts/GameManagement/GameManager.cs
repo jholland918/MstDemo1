@@ -34,8 +34,14 @@ namespace Assets.App.Scripts.GameManagement
 
             PlayerCharacter.OnServerCharacterSpawnedEvent += PlayerCharacter_OnServerCharacterSpawned;
             PlayerCharacter.OnCharacterDestroyedEvent += PlayerCharacter_OnCharacterDestroyed;
+            PlayerCharacter.OnLocalCharacterSpawnedEvent += PlayerCharacter_OnLocalCharacterSpawnedEvent;
             PlayerCharacterVitals.OnServerCharacterDieEvent += OnCharacterDie;
             PlayerCharacterVitals.OnServerCharacterAliveEvent += OnCharacterAlive;
+        }
+
+        private void PlayerCharacter_OnLocalCharacterSpawnedEvent(PlayerCharacter playerCharacter)
+        {
+            PlayerNameTracker.SetName(Mst.Client.Auth.AccountInfo.Username);
         }
 
         private void OnCharacterDie(PlayerCharacterVitals playerCharacterVitals) => _gameHandler.OnCharacterDie(playerCharacterVitals);

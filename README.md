@@ -65,6 +65,12 @@
 			 Dropdown > Template > Viewport > Content > Item > Item Label : Font size 48
 	    *    See also https://forum.unity.com/threads/changing-size-of-dropdown-in-unity.412977/
 10. Indicate team in-game...
+    *   For the FpsCharacter prefab, follow https://www.youtube.com/watch?v=aPJVhLVEexY to 9:50, then...
+	*   Attach LookAtCamera.cs to FpsPrefab > Canvas.
+    *   Set the player name using `PlayerNameTracker.SetName(playerName);` in GameManager > PlayerCharacter . OnLocalCharacterSpawnedEvent :: PlayerNameTracker.SetName(Mst.Client.Auth.AccountInfo.Username);
+    *   Attach the PlayerNameTracker.cs script to Room/--GAME_MANAGER
+    *   ...
+	
 
 ## Reference Cleanup (WIP)
 
