@@ -1,4 +1,5 @@
-﻿using MasterServerToolkit.Bridges;
+﻿using Assets.App.Scripts.GameManagement;
+using MasterServerToolkit.Bridges;
 using MasterServerToolkit.MasterServer;
 using MasterServerToolkit.Networking;
 using MasterServerToolkit.UI;
@@ -27,6 +28,8 @@ namespace Assets.App.Scripts.UI
         private RectTransform listContainer;
         [SerializeField]
         private TMP_Text statusInfoText;
+        [SerializeField]
+        private UIButton changeTeamButton;
 
         [SerializeField]
         private UnityEngine.UI.Button startGameButton;
@@ -35,6 +38,7 @@ namespace Assets.App.Scripts.UI
 
         public UnityEvent OnStartGameEvent;
         private RoomAccessPacket _currentRoomAccess;
+        private bool _isTeamGame;
 
         protected override void Awake()
         {
@@ -50,6 +54,7 @@ namespace Assets.App.Scripts.UI
             _lobby.OnMemberJoinedEvent -= OnMemberJoined;
             _lobby.OnMemberLeftEvent -= OnMemberLeft;
             _lobby.OnMemberReadyStatusChangedEvent -= OnMemberReadyStatusChanged;
+            _lobby.OnMemberTeamChangedEvent -= OnMemberTeamChangedEvent;
 
             base.OnDestroy();
         }
@@ -83,6 +88,11 @@ namespace Assets.App.Scripts.UI
             _lobby.OnLobbyStateChangeEvent += OnLobbyStateChange;
             _lobby.OnLobbyStatusTextChangeEvent += OnLobbyStatusTextChange;
 
+            string lobbyFactoryId = _lobby.Properties[MstDictKeys.LOBBY_FACTORY_ID];
+            Debug.Log($"Bruh lobbyFactoryId: {lobbyFactoryId}");
+            _isTeamGame = lobbyFactoryId == "TwoVsTwo" ? true : false;
+            changeTeamButton.gameObject.SetActive(_isTeamGame);
+
             ResetLobby();
         }
 
@@ -91,6 +101,7 @@ namespace Assets.App.Scripts.UI
             _lobby.OnMemberJoinedEvent += OnMemberJoined;
             _lobby.OnMemberLeftEvent += OnMemberLeft;
             _lobby.OnMemberReadyStatusChangedEvent += OnMemberReadyStatusChanged;
+            _lobby.OnMemberTeamChangedEvent += OnMemberTeamChangedEvent;
 
             bool isMasterUser = _lobby.IsMasterUser(Mst.Client.Auth.AccountInfo.Username);
             startGameButton.gameObject.SetActive(isMasterUser);
@@ -133,7 +144,7 @@ namespace Assets.App.Scripts.UI
                     // Put player in room
                     Debug.Log("LobbyView:OnLobbyStateChange:GameInProgress");
                     _currentRoomAccess = null;
-                    _lobby.GetLobbyRoomAccess((access, error) => 
+                    _lobby.GetLobbyRoomAccess((access, error) =>
                     {
                         Debug.Log("LobbyView:JoinedLobby:GetLobbyRoomAccess");
                         if (!string.IsNullOrWhiteSpace(error))
@@ -242,10 +253,24 @@ namespace Assets.App.Scripts.UI
             _lobby.SetReadyStatus(false);
         }
 
+        public void OnChangeTeamClick()
+        {
+            string currentTeam = _lobby.Members[Mst.Client.Auth.AccountInfo.Username].Team;
+            string otherTeam = currentTeam.Equals("A", StringComparison.OrdinalIgnoreCase) ? "B" : "A";
+
+            _lobby.JoinTeam(otherTeam, (isSuccessful, error) =>
+            {
+                if (!isSuccessful)
+                {
+                    Debug.LogError($"Lobby Change Team Error: {error}");
+                }
+            });
+        }
+
         public void OnStartGame()
         {
-            _lobby.StartGame((isSuccessful, error) => 
-            { 
+            _lobby.StartGame((isSuccessful, error) =>
+            {
                 if (!isSuccessful)
                 {
                     Debug.LogError($"Lobby Start Game Error: {error}");
@@ -264,6 +289,11 @@ namespace Assets.App.Scripts.UI
         }
 
         private void OnMemberReadyStatusChanged(LobbyMemberData member, bool isReady)
+        {
+            DrawPlayersList();
+        }
+
+        private void OnMemberTeamChangedEvent(LobbyMemberData member, LobbyTeamData team)
         {
             DrawPlayersList();
         }

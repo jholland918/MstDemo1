@@ -53,7 +53,18 @@
 	    *    Rect Transform > Width 600, Height 100
 		*    TextMeshPro > Font Size 96
 		*    Add reference to gameresultstext to parent roomhudview
-9.  Profit!!
+9.  Support team games
+    *   Add changeTeamButton to Client/MasterCanvas/LobbyView.
+	*   Change Buttons > Layout Element > Preferred Width to 200 for all buttons in row
+	*   Update Button Text to "Change Team"
+	*   Wire up button to OnChangeTeamClick click handler
+	*   Make dropdown options for gametype bigger: CreateNewLobbyView/panel/container/gameTypeInputDropdown
+	    *    Change to 45 for the following:
+			 Dropdown > Template > Viewport > Content : Height 45
+			 Dropdown > Template > Viewport > Content > Item : Height 45
+			 Dropdown > Template > Viewport > Content > Item > Item Label : Font size 48
+	    *    See also https://forum.unity.com/threads/changing-size-of-dropdown-in-unity.412977/
+10. Indicate team in-game...
 
 ## Reference Cleanup (WIP)
 
