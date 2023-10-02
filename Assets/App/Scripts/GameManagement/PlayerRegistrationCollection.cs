@@ -13,80 +13,62 @@ namespace Assets.App.Scripts.GameManagement
         private readonly Dictionary<string, PlayerRegistration> _players = new Dictionary<string, PlayerRegistration>();
         private readonly Dictionary<int, string> _ids = new();
 
-        public IEnumerator<PlayerRegistration> GetEnumerator()
-        {
-            return _players.Values.GetEnumerator();
-        }
-
-        public void Add(RoomPlayer roomPlayer)
-        {
-            if (_ids.ContainsKey(roomPlayer.RoomPeerId))
-            {
-                _ids[roomPlayer.RoomPeerId] = roomPlayer.Username;
-            }
-            else
-            {
-                _ids.Add(roomPlayer.RoomPeerId, roomPlayer.Username);
-            }
-
-            if (_players.ContainsKey(roomPlayer.Username))
-            {
-                var player = _players[roomPlayer.Username];
-                player.RoomPlayer = roomPlayer;
-            }
-            else
-            {
-                _players.Add(roomPlayer.Username, new PlayerRegistration
-                {
-                    RoomPlayer = roomPlayer,
-                });
-            }
-        }
-
+        // Calls to this Add() method happen first
         public void Add(LobbyMemberData lobbyMember)
         {
-            if (_players.ContainsKey(lobbyMember.Username))
+            Debug.Log($"Add:LobbyMemberData:Username[{lobbyMember.Username}]");
+            _players.Add(lobbyMember.Username, new PlayerRegistration
             {
-                var player = _players[lobbyMember.Username];
-                player.LobbyMemberData = lobbyMember;
-            }
-            else
-            {
-                _players.Add(lobbyMember.Username, new PlayerRegistration
-                {
-                    LobbyMemberData = lobbyMember,
-                });
-            }
+                LobbyMemberData = lobbyMember,
+            });
         }
 
+        // Calls to this Add() method happen second
+        public void Add(RoomPlayer roomPlayer)
+        {
+            Debug.Log($"Add:RoomPlayer: RoomPeerId[{roomPlayer.RoomPeerId}] Username[{roomPlayer.Username}]");
+
+            // This happens before `Add(PlayerCharacter character)`, so we don't need to call ContainsKey() - Just Add()
+            _ids.Add(roomPlayer.RoomPeerId, roomPlayer.Username);
+
+            // An entry should have already been created for this username by `Add(LobbyMemberData lobbyMember)`
+            var player = _players[roomPlayer.Username];
+            player.RoomPlayer = roomPlayer;
+        }
+
+        // Calls to this Add() method happen third
         public void Add(PlayerCharacter character)
         {
-            PlayerRegistration player;
-            int id = character.NetworkObject.OwnerId;
+            Debug.Log($"Add:PlayerCharacter: OwnerId[{character.NetworkObject.OwnerId}]");
+            
+            // An ID should have already been added by `Add(RoomPlayer roomPlayer)`
+            string username = _ids[character.NetworkObject.OwnerId];
 
-            string username = _ids.ContainsKey(id) ? _ids[id] : null;
-            if (_players.ContainsKey(username))
-            {
-                player = _players[username];
-                player.PlayerCharacter = character;
-                return;
-            }
+            Debug.Log($"Add:PlayerCharacter: Found Username[{username}]");
 
-            // Backup search...
-            player = _players.Values.First(p => p.RoomPlayer?.RoomPeerId == id || p.PlayerCharacter?.NetworkObject.OwnerId == id);
+            // This player registration should have already been added in `Add(LobbyMemberData lobbyMember)`
+            var player = _players[username];
             player.PlayerCharacter = character;
         }
 
         public void Remove(RoomPlayer roomPlayer)
         {
-            _players.Remove(roomPlayer.Username);
-            _ids.Remove(roomPlayer.RoomPeerId);
+            // Hmmm, Instead of removing players, should they have a property named Active and update it to false instead?
+            Debug.Log("Remove:RoomPlayer");
+            //_players.Remove(roomPlayer.Username);
+            //_ids.Remove(roomPlayer.RoomPeerId);
         }
 
         public void Remove(PlayerCharacter character)
         {
-            var player = _players[_ids[character.NetworkObject.OwnerId]];
-            player.PlayerCharacter = null;
+            Debug.Log("Remove:PlayerCharacter");
+            //var player = _players[_ids[character.NetworkObject.OwnerId]];
+            //player.PlayerCharacter = null;
+        }
+
+        public IEnumerator<PlayerRegistration> GetEnumerator()
+        {
+            return _players.Values.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

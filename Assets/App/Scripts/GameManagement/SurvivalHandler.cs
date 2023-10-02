@@ -8,11 +8,11 @@ namespace Assets.App.Scripts.GameManagement
 {
     internal class SurvivalHandler : BaseGameHandler
     {
-        private Logger _log = Mst.Create.Logger("SurvivalGameHandler");
+        private readonly Logger _log = Mst.Create.Logger(nameof(SurvivalHandler));
 
-        private List<int> _deadCharacters = new();
+        private readonly List<int> _deadCharacters = new();
 
-        public SurvivalHandler(GameManager gameManager) 
+        public SurvivalHandler(GameManager gameManager)
             : base(gameManager)
         {
         }
@@ -22,18 +22,19 @@ namespace Assets.App.Scripts.GameManagement
             _log.Debug("*** OnCharacterDie ***");
             _deadCharacters.Add(characterVitals.NetworkObject.OwnerId);
 
-            var aliveCharacters = PlayerRegistrations.Where(pr => !_deadCharacters.Contains(pr.PlayerCharacter.NetworkObject.OwnerId));
+            var aliveCharacters = PlayerRegistrations.Where(p =>!_deadCharacters.Contains(p.OwnerId));
+
             if (aliveCharacters.Count() == 1)
             {
-                Dictionary<int, bool> playerResults = new Dictionary<int, bool>();
+                Dictionary<int, string> playerResults = new();
 
-                foreach (var reg in PlayerRegistrations)
+                foreach (var p in PlayerRegistrations)
                 {
-                    bool isWinner = aliveCharacters.Any(ac => ac.PlayerCharacter.NetworkObject.OwnerId == reg.PlayerCharacter.NetworkObject.OwnerId);
-                    playerResults.Add(reg.PlayerCharacter.NetworkObject.OwnerId, isWinner);
+                    bool isWinner = aliveCharacters.Any(a => a.OwnerId == p.OwnerId);
+                    playerResults.Add(p.OwnerId, (isWinner ? "You Won!" : "You Lost!"));
                 }
 
-                _gameManager.OnGameOver(new GameResults 
+                _gameManager.OnGameOver(new GameResults
                 {
                     PlayerResults = playerResults
                 });

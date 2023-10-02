@@ -36,8 +36,7 @@ namespace Assets.App.Scripts
             if (gameResults.PlayerResults.ContainsKey(_character.NetworkObject.OwnerId))
             {
                 Debug.Log("RoomHudView:OnGameResults:ContainsKey");
-                bool isWinner = gameResults.PlayerResults[_character.NetworkObject.OwnerId];
-                GameResultsText.text = isWinner ? "You Won!" : "You Lost!";
+                GameResultsText.text = gameResults.PlayerResults[_character.NetworkObject.OwnerId];
             }
         }
 

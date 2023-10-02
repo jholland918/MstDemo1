@@ -1,6 +1,5 @@
 ﻿using Assets.App.Scripts.Character;
 using MasterServerToolkit.MasterServer;
-using System.Collections.Generic;
 
 namespace Assets.App.Scripts.GameManagement
 {
@@ -12,7 +11,7 @@ namespace Assets.App.Scripts.GameManagement
 
         public BaseGameHandler(GameManager gameManager)
         {
-            _log = Mst.Create.Logger("BaseGameHandler");
+            _log = Mst.Create.Logger(nameof(BaseGameHandler));
             _gameManager = gameManager;
         }
 

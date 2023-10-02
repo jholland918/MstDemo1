@@ -8,40 +8,75 @@ namespace Assets.App.Scripts.GameManagement
 {
     internal class TwoVsTwoHandler : BaseGameHandler
     {
-        private Logger _log = Mst.Create.Logger("TwoVsTwoHandler");
+        private readonly Logger _log = Mst.Create.Logger(nameof(TwoVsTwoHandler));
 
-        private List<int> _deadCharacters = new();
-        private Dictionary<string, LobbyMemberData> _lobbyMembers;
+        private readonly List<int> _deadCharacters = new();
 
         public TwoVsTwoHandler(GameManager gameManager) 
             : base(gameManager)
         {
-            // TODO: This looks like a bug waiting to happen. This members list isn't 
-            // updated if a player leaves the room. Probably need to look at adding the 
-            // team into to a list that's updated.
-            _lobbyMembers = gameManager.LobbyInfo.Members;
         }
 
         public override void OnCharacterDie(PlayerCharacterVitals characterVitals)
         {
-            //_log.Debug("*** OnCharacterDie ***");
-            //_deadCharacters.Add(characterVitals.NetworkObject.OwnerId);
-            //var aliveCharacters = PlayerCharacters.Where(kvp => !_deadCharacters.Contains(kvp.Key));
-            //if (aliveCharacters.Count() == 1)
-            //{
-            //    Dictionary<int, bool> playerResults = new Dictionary<int, bool>();
+            _log.Debug("*** OnCharacterDie ***");
+            _deadCharacters.Add(characterVitals.NetworkObject.OwnerId);
 
-            //    foreach (var kvp in PlayerCharacters)
-            //    {
-            //        bool isWinner = aliveCharacters.Any(kvp2 => kvp2.Key == kvp.Key);
-            //        playerResults.Add(kvp.Key, isWinner);
-            //    }
+            // Get the body counts!
+            Dictionary<string, int> dead = new();
+            Dictionary<string, int> alive = new();
+            foreach (var p in PlayerRegistrations)
+            {
+                if (!dead.ContainsKey(p.Team))
+                {
+                    dead.Add(p.Team, 0);
+                }
 
-            //    _gameManager.OnGameOver(new GameResults
-            //    {
-            //        PlayerResults = playerResults
-            //    });
-            //}
+                if (!alive.ContainsKey(p.Team))
+                {
+                    alive.Add(p.Team, 0);
+                }
+
+                if (_deadCharacters.Contains(p.OwnerId))
+                {
+                    dead[p.Team] += 1;
+                }
+                else
+                {
+                    alive[p.Team] += 1;
+                }
+            }
+
+            if (alive.Values.Sum() == 0)
+            {
+                // Everyone is dead
+                Dictionary<int, string> playerResults = new();
+                foreach (var p in PlayerRegistrations)
+                {
+                    playerResults.Add(p.OwnerId, "Draw!");
+                }
+
+                _gameManager.OnGameOver(new GameResults
+                {
+                    PlayerResults = playerResults
+                });
+            }
+            else if (alive.Count(a => a.Value > 0) == 1)
+            {
+                // Only one team is left alive
+                string winningTeam = alive.Single(a => a.Value > 0).Key;
+                Dictionary<int, string> playerResults = new();
+                foreach (var p in PlayerRegistrations)
+                {
+                    string resultMessage = p.Team.Equals(winningTeam) ? "Your team won!" : "Your team lost!";
+                    playerResults.Add(p.OwnerId, resultMessage);
+                }
+
+                _gameManager.OnGameOver(new GameResults
+                {
+                    PlayerResults = playerResults
+                });
+            }
         }
     }
 }

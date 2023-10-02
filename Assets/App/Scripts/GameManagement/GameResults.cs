@@ -6,6 +6,6 @@ namespace Assets.App.Scripts.GameManagement
 {
     public class GameResults
     {
-        public Dictionary<int, bool> PlayerResults;
+        public Dictionary<int, string> PlayerResults;
     }
 }
