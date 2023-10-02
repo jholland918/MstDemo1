@@ -18,9 +18,6 @@ namespace Assets.App.Scripts.GameManagement
 
         public PlayerRegistrationCollection PlayerRegistrations = new();
 
-        public Dictionary<int, RoomPlayer> RoomPlayers;
-        public Dictionary<int, PlayerCharacter> PlayerCharacters;
-
         private RoomController _roomController;
         public LobbyDataPacket LobbyInfo { get; private set; }
         private bool _isTeamGame;
@@ -32,9 +29,6 @@ namespace Assets.App.Scripts.GameManagement
             Debug.Log("GameManager:Awake");
 
             _gameHandler = new BaseGameHandler(this);
-
-            RoomPlayers = new Dictionary<int, RoomPlayer>();
-            PlayerCharacters = new Dictionary<int, PlayerCharacter>();
 
             PlayerCharacter.OnServerCharacterSpawnedEvent += PlayerCharacter_OnServerCharacterSpawned;
             PlayerCharacter.OnCharacterDestroyedEvent += PlayerCharacter_OnCharacterDestroyed;
@@ -136,12 +130,12 @@ namespace Assets.App.Scripts.GameManagement
                 LobbyInfo = info;
 
                 _isTeamGame = GameManager.IsTeamGame(LobbyInfo.LobbyProperties);
-                if (_isTeamGame)
+
+                foreach (LobbyMemberData lobbyMember in LobbyInfo.Members.Values)
                 {
-                    foreach (LobbyMemberData lobbyMember in LobbyInfo.Members.Values)
-                    {
+                    PlayerRegistrations.Add(lobbyMember);
+                    if (_isTeamGame)
                         PlayerNameTracker.SetTeam(lobbyMember.Username, lobbyMember.Team);
-                    }
                 }
 
                 string lobbyFactoryId = LobbyInfo.LobbyProperties[MstDictKeys.LOBBY_FACTORY_ID];
@@ -171,66 +165,22 @@ namespace Assets.App.Scripts.GameManagement
 
         public void RoomServerManager_OnPlayerJoinedRoom(RoomPlayer roomPlayer)
         {
-            Debug.Log($"roomPlayer.RoomPeerId[{roomPlayer.RoomPeerId}]");
-
-            int id = roomPlayer.RoomPeerId;
-            if (RoomPlayers.ContainsKey(id))
-            {
-                RoomPlayers[id] = roomPlayer;
-            }
-            else
-            {
-                RoomPlayers.Add(id, roomPlayer);
-            }
-
             PlayerRegistrations.Add(roomPlayer);
         }
 
         public void RoomServerManager_OnPlayerLeftRoom(RoomPlayer roomPlayer)
         {
-            Debug.Log($"roomPlayer.RoomPeerId[{roomPlayer.RoomPeerId}]");
-
-            if (RoomPlayers.ContainsKey(roomPlayer.RoomPeerId))
-            {
-                RoomPlayers.Remove(roomPlayer.RoomPeerId);
-                PlayerRegistrations.Remove(roomPlayer);
-            }
+            PlayerRegistrations.Remove(roomPlayer);
         }
 
         private void PlayerCharacter_OnServerCharacterSpawned(PlayerCharacter character)
         {
-            int id = character.NetworkObject.OwnerId;
-            if (PlayerCharacters.ContainsKey(id))
-            {
-                PlayerCharacters[id] = character;
-            }
-            else
-            {
-                PlayerCharacters.Add(id, character);
-            }
-
             PlayerRegistrations.Add(character);
         }
 
         private void PlayerCharacter_OnCharacterDestroyed(PlayerCharacter character)
         {
-            Debug.Log($"OnCharacterDestroyed:OwnerId[{character.NetworkObject.OwnerId}]");
-            if (PlayerCharacters.ContainsKey(character.NetworkObject.OwnerId))
-            {
-                PlayerCharacters.Remove(character.NetworkObject.OwnerId);
-            }
-        }
-
-        public PlayerCharacter FindPlayerCharacter(RoomPlayer roomPlayer)
-        {
-            PlayerCharacters.TryGetValue(roomPlayer.RoomPeerId, out PlayerCharacter playerCharacter);
-            return playerCharacter;
-        }
-
-        public RoomPlayer FindRoomPlayer(PlayerCharacter playerCharacter)
-        {
-            RoomPlayers.TryGetValue(playerCharacter.NetworkObject.OwnerId, out RoomPlayer roomPlayer);
-            return roomPlayer;
+            PlayerRegistrations.Remove(character);
         }
     }
 }

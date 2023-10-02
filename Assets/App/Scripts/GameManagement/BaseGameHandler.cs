@@ -7,7 +7,7 @@ namespace Assets.App.Scripts.GameManagement
     internal class BaseGameHandler
     {
         protected GameManager _gameManager;
-        protected Dictionary<int, PlayerCharacter> PlayerCharacters => _gameManager.PlayerCharacters;
+        protected PlayerRegistrationCollection PlayerRegistrations => _gameManager.PlayerRegistrations;
         private MasterServerToolkit.Logging.Logger _log;
 
         public BaseGameHandler(GameManager gameManager)

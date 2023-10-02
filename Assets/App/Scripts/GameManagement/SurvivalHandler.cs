@@ -21,15 +21,16 @@ namespace Assets.App.Scripts.GameManagement
         {
             _log.Debug("*** OnCharacterDie ***");
             _deadCharacters.Add(characterVitals.NetworkObject.OwnerId);
-            var aliveCharacters = PlayerCharacters.Where(kvp => !_deadCharacters.Contains(kvp.Key));
+
+            var aliveCharacters = PlayerRegistrations.Where(pr => !_deadCharacters.Contains(pr.PlayerCharacter.NetworkObject.OwnerId));
             if (aliveCharacters.Count() == 1)
             {
                 Dictionary<int, bool> playerResults = new Dictionary<int, bool>();
 
-                foreach (var kvp in PlayerCharacters)
+                foreach (var reg in PlayerRegistrations)
                 {
-                    bool isWinner = aliveCharacters.Any(kvp2 => kvp2.Key == kvp.Key);
-                    playerResults.Add(kvp.Key, isWinner);
+                    bool isWinner = aliveCharacters.Any(ac => ac.PlayerCharacter.NetworkObject.OwnerId == reg.PlayerCharacter.NetworkObject.OwnerId);
+                    playerResults.Add(reg.PlayerCharacter.NetworkObject.OwnerId, isWinner);
                 }
 
                 _gameManager.OnGameOver(new GameResults 

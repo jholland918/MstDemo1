@@ -1,12 +1,11 @@
 ﻿#if FISHNET
+using FishNet.Object.Synchronizing;
 using System;
 
 namespace Assets.App.Scripts.Character
 {
     public class PlayerCharacter : PlayerCharacterBehaviour
     {
-        public string Team { get; internal set; }
-
         public static event Action<PlayerCharacter> OnServerCharacterSpawnedEvent;
         public static event Action<PlayerCharacter> OnClientCharacterSpawnedEvent;
         public static event Action<PlayerCharacter> OnLocalCharacterSpawnedEvent;
