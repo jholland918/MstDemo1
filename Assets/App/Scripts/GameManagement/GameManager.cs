@@ -16,11 +16,13 @@ namespace Assets.App.Scripts.GameManagement
     {
         public int MatchTimeSeconds = 300;
 
+        public PlayerRegistrationCollection PlayerRegistrations = new();
+
         public Dictionary<int, RoomPlayer> RoomPlayers;
         public Dictionary<int, PlayerCharacter> PlayerCharacters;
 
         private RoomController _roomController;
-        private LobbyDataPacket _lobbyInfo;
+        public LobbyDataPacket LobbyInfo { get; private set; }
         private bool _isTeamGame;
         private BaseGameHandler _gameHandler;
         private RoomOptions _roomOptions;
@@ -131,18 +133,18 @@ namespace Assets.App.Scripts.GameManagement
                     return;
                 }
 
-                _lobbyInfo = info;
+                LobbyInfo = info;
 
-                _isTeamGame = GameManager.IsTeamGame(_lobbyInfo.LobbyProperties);
+                _isTeamGame = GameManager.IsTeamGame(LobbyInfo.LobbyProperties);
                 if (_isTeamGame)
                 {
-                    foreach (var lobbyMember in _lobbyInfo.Members.Values)
+                    foreach (LobbyMemberData lobbyMember in LobbyInfo.Members.Values)
                     {
                         PlayerNameTracker.SetTeam(lobbyMember.Username, lobbyMember.Team);
                     }
                 }
 
-                string lobbyFactoryId = _lobbyInfo.LobbyProperties[MstDictKeys.LOBBY_FACTORY_ID];
+                string lobbyFactoryId = LobbyInfo.LobbyProperties[MstDictKeys.LOBBY_FACTORY_ID];
 
                 Debug.Log($"lobbyFactoryId:{lobbyFactoryId}");
 
@@ -180,6 +182,8 @@ namespace Assets.App.Scripts.GameManagement
             {
                 RoomPlayers.Add(id, roomPlayer);
             }
+
+            PlayerRegistrations.Add(roomPlayer);
         }
 
         public void RoomServerManager_OnPlayerLeftRoom(RoomPlayer roomPlayer)
@@ -189,6 +193,7 @@ namespace Assets.App.Scripts.GameManagement
             if (RoomPlayers.ContainsKey(roomPlayer.RoomPeerId))
             {
                 RoomPlayers.Remove(roomPlayer.RoomPeerId);
+                PlayerRegistrations.Remove(roomPlayer);
             }
         }
 
@@ -203,6 +208,8 @@ namespace Assets.App.Scripts.GameManagement
             {
                 PlayerCharacters.Add(id, character);
             }
+
+            PlayerRegistrations.Add(character);
         }
 
         private void PlayerCharacter_OnCharacterDestroyed(PlayerCharacter character)
