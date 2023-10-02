@@ -4,6 +4,7 @@ using MasterServerToolkit.MasterServer;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.App.Scripts.GameManagement
@@ -20,6 +21,7 @@ namespace Assets.App.Scripts.GameManagement
 
         private RoomController _roomController;
         private LobbyDataPacket _lobbyInfo;
+        private bool _isTeamGame;
         private BaseGameHandler _gameHandler;
         private RoomOptions _roomOptions;
 
@@ -37,6 +39,13 @@ namespace Assets.App.Scripts.GameManagement
             PlayerCharacter.OnLocalCharacterSpawnedEvent += PlayerCharacter_OnLocalCharacterSpawnedEvent;
             PlayerCharacterVitals.OnServerCharacterDieEvent += OnCharacterDie;
             PlayerCharacterVitals.OnServerCharacterAliveEvent += OnCharacterAlive;
+        }
+
+        public static bool IsTeamGame(Dictionary<string, string> lobbyProperties)
+        {
+            string lobbyFactoryId = lobbyProperties[MstDictKeys.LOBBY_FACTORY_ID];
+            bool isTeamGame = lobbyFactoryId == "TwoVsTwo" ? true : false;
+            return isTeamGame;
         }
 
         private void PlayerCharacter_OnLocalCharacterSpawnedEvent(PlayerCharacter playerCharacter)
@@ -123,6 +132,15 @@ namespace Assets.App.Scripts.GameManagement
                 }
 
                 _lobbyInfo = info;
+
+                _isTeamGame = GameManager.IsTeamGame(_lobbyInfo.LobbyProperties);
+                if (_isTeamGame)
+                {
+                    foreach (var lobbyMember in _lobbyInfo.Members.Values)
+                    {
+                        PlayerNameTracker.SetTeam(lobbyMember.Username, lobbyMember.Team);
+                    }
+                }
 
                 string lobbyFactoryId = _lobbyInfo.LobbyProperties[MstDictKeys.LOBBY_FACTORY_ID];
 

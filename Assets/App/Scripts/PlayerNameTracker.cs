@@ -2,7 +2,10 @@ using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using FishNet.Transporting;
+using MasterServerToolkit.MasterServer;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 // https://www.youtube.com/watch?v=aPJVhLVEexY
 // https://github.com/FirstGearGames/FishNet-Examples/blob/main/Assets/Walkthrough/Scripts/PlayerNameTracker.cs
@@ -17,6 +20,11 @@ namespace Assets.App.Scripts
         /// Called when any player changes their name.
         /// </summary>
         public static event Action<NetworkConnection, string> OnNameChange;
+
+        /// <summary>
+        /// Collection of user team assignments
+        /// </summary>
+        private readonly Dictionary<string, string> _userTeams = new Dictionary<string, string>();
 
         /// <summary>
         /// Collection of each player name for connections.
@@ -94,7 +102,25 @@ namespace Assets.App.Scripts
         [ServerRpc(RequireOwnership = false)]
         private void ServerSetName(string name, NetworkConnection sender = null)
         {
-            _playerNames[sender] = name;
+            string team = string.Empty;
+            if (_userTeams.ContainsKey(name))
+            {
+                team = $"[{_userTeams[name]}] ";
+            }
+
+            _playerNames[sender] = $"{team}{name}";
+        }
+
+        public static void SetTeam(string username, string team)
+        {
+            if (_instance._userTeams.ContainsKey(username))
+            {
+                _instance._userTeams[username] = team;
+            }
+            else
+            {
+                _instance._userTeams.Add(username, team);
+            }           
         }
     }
 }

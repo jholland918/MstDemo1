@@ -88,9 +88,8 @@ namespace Assets.App.Scripts.UI
             _lobby.OnLobbyStateChangeEvent += OnLobbyStateChange;
             _lobby.OnLobbyStatusTextChangeEvent += OnLobbyStatusTextChange;
 
-            string lobbyFactoryId = _lobby.Properties[MstDictKeys.LOBBY_FACTORY_ID];
-            Debug.Log($"Bruh lobbyFactoryId: {lobbyFactoryId}");
-            _isTeamGame = lobbyFactoryId == "TwoVsTwo" ? true : false;
+            _isTeamGame = GameManager.IsTeamGame(_lobby.Properties);
+
             changeTeamButton.gameObject.SetActive(_isTeamGame);
 
             ResetLobby();
