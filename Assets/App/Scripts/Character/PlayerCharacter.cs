@@ -1,4 +1,5 @@
 ﻿#if FISHNET
+using FishNet.Object.Synchronizing;
 using System;
 
 namespace Assets.App.Scripts.Character

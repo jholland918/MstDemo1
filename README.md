@@ -1,5 +1,77 @@
 # Master Server Toolkit Demo
 
+## MST7 Game Types
+1.  Add /Assets/App/Scripts/Character/PlayerCharacterShoot.cs
+2.  Add /Assets/App/Scripts/Character/PredictedProjectile.cs
+3.  Attach PlayerCharacterShoot.cs to FpsCharacter prefab
+4.  Create Bullet prefab and attach PredictedProjectile.cs
+5.  Add reference to Bullet prefab on FpsCharacter > PlayerCharacterShoot > Projectile ref
+6.  Add Player Health
+	*   For Room//MasterCanvas/RoomHudView, unpack RoomHudView prefab so MST upgrades will not affect it
+	*   Add "HealthText" to RoomHudView: Right-click RoomHudView > UI > Text - TextMeshPro, named "HealthText"
+	*   HealthText Setup
+        *   Rect Transform > Anchor > Top Left
+        *   Rect Transform > Pivot > x 0 y 1
+        *   Rect Transform > Pos X 20, Pos Y -90
+		https://youtu.be/hQyBnHofCKg?si=Mj7DfUMpfiFORJaZ
+	*   Attach PlayerCharacterVitals.cs to FpsCharacter prefab
+        *   Reference the Character Controller on the prefab to the property of the same name to the PlayerCharacterVitals.cs
+        *   Ensure custom code is added to script...
+	*   Update PredictedProjectile > OnCollisionEnter() to add damage to PlayerCharacterVitals...
+	    *   Note: The `PlayerCharacterVitals playerVitals = collision.gameObject.GetComponent<PlayerCharacterVitals>();` needs to use GetComponentInParent<>() since the collision will be happening on a child gameObject of "Body"
+	*   Add rigidbody to FpsCharacter prefab
+	    *   Open FpsCharacter prefab
+	    *   Add rigidbody to child gameobject "Body"
+		    *   Freeze XYZ Position & Rotation
+		    *   Uncheck "Use Gravity"
+7.  Make RoomHudView.cs (in Room//MasterCanvas) our own script so we can customize it.
+	*   Copy Assets/MasterServerToolkit/Demos/BasicRoomsAndLobbies/Scripts/RoomHudView.cs to Assets/App/Scripts/RoomHudView.cs
+	*   Update guid refs in Room.unity scene
+	    OLD: 1b0d71f0b05837841878ef1150897d70
+		NEW: 3101137a69689e8448641bc5f343daee (changes each time it's copied btw)
+	*   Change namespace to `Assets.App.Scripts`
+	*   Add HealthText ref from hierarchy to script property in inspector
+8.  Create Die Effect Prefab
+	*   Open Sample Scene
+	*   Create new game object, name it "DieEffect"
+	*   Add new cylinder, Scale x 0.1, y 2.0, z 0.1
+	*   Change cylinder Mesh Renderer > Material: Orange
+	    *   Duplicate the cylinder three times so there is 4 of them
+	    *   Rotate them around to make an asterisk looking shape
+		*   Place the 4 cylinders into a "Group1" container and duplicate the container
+		*   Rotate the duplicated container to make an "asterisk ball" look.
+		*   Make the Transform Postion: x 0, y 1, z 0
+	*   Drag the "DieEffect" into the /App/Prefabs directory, then delete it from the SampleScene
+	*   Add DieEffect prefab to FpsCharacter prefab > Player Character Vitals > Die Effect Prefab
+	*   Fix FpsCharacter refs inside App/Data/Demo SinglePrefabsObjects & Room/--PLAYER_SPAWNER...
+8.  Create GameManager script inside App/Scripts/GameManagement
+	*   Copy logic from MatchTimer into GameManager and delete MatchTimer
+	*   Create new --GAME_MANAGER object in Hierarchy and attach GameManager.cs to it
+	*   Copy remaining GameManagement scripts
+	*   Add GameManager ref to RoomHudView
+	*   Add GameResultsText to RoomHudView and populate OnGameResults...
+	    *    Rect Transform > Width 600, Height 100
+		*    TextMeshPro > Font Size 96
+		*    Add reference to gameresultstext to parent roomhudview
+9.  Support team games
+    *   Add changeTeamButton to Client/MasterCanvas/LobbyView.
+	*   Change Buttons > Layout Element > Preferred Width to 200 for all buttons in row
+	*   Update Button Text to "Change Team"
+	*   Wire up button to OnChangeTeamClick click handler
+	*   Make dropdown options for gametype bigger: CreateNewLobbyView/panel/container/gameTypeInputDropdown
+	    *    Change to 45 for the following:
+			 Dropdown > Template > Viewport > Content : Height 45
+			 Dropdown > Template > Viewport > Content > Item : Height 45
+			 Dropdown > Template > Viewport > Content > Item > Item Label : Font size 48
+	    *    See also https://forum.unity.com/threads/changing-size-of-dropdown-in-unity.412977/
+10. Indicate team in-game...
+    *   For the FpsCharacter prefab, follow https://www.youtube.com/watch?v=aPJVhLVEexY to 9:50, then...
+	*   Attach LookAtCamera.cs to FpsPrefab > Canvas.
+    *   Set the player name using `PlayerNameTracker.SetName(playerName);` in GameManager > PlayerCharacter . OnLocalCharacterSpawnedEvent :: PlayerNameTracker.SetName(Mst.Client.Auth.AccountInfo.Username);
+    *   Attach the PlayerNameTracker.cs script to Room/--GAME_MANAGER
+    *   ...
+	
+
 ## Reference Cleanup (WIP)
 
 1.  Room Scene References

@@ -1,7 +1,9 @@
 ﻿#if FISHNET
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using MasterServerToolkit.Networking;
 using System;
+using TMPro;
 using UnityEngine;
 
 namespace Assets.App.Scripts.Character
@@ -10,6 +12,9 @@ namespace Assets.App.Scripts.Character
 
     public class PlayerCharacterVitals : PlayerCharacterBehaviour
     {
+        public static event Action<PlayerCharacterVitals> OnServerCharacterDieEvent;
+        public static event Action<PlayerCharacterVitals> OnServerCharacterAliveEvent;
+
         #region INSPECTOR
 
         [Header("Components"), SerializeField]
@@ -40,6 +45,21 @@ namespace Assets.App.Scripts.Character
         public bool IsAlive { get; protected set; } = true;
 
         public override bool IsReady => characterController;
+
+        #region MstDemo1 Changes
+        public int Health = 10;
+
+        public void TakeDamage(int hitPoints)
+        {
+            Health -= hitPoints;
+            NotifyVitalChanged((short)PlayerVitalsKey.Health, Health);
+
+            if (Health <= 0)
+            {
+                NotifyDied();
+            }
+        }
+        #endregion MstDemo1 Changes
 
         /// <summary>
         /// 
@@ -72,6 +92,7 @@ namespace Assets.App.Scripts.Character
             {
                 IsAlive = true;
                 Rpc_NotifyAlive();
+                OnServerCharacterAliveEvent?.Invoke(this);
             }
         }
 
@@ -96,6 +117,7 @@ namespace Assets.App.Scripts.Character
 
                 IsAlive = false;
                 Rpc_NotifyDied();
+                OnServerCharacterDieEvent?.Invoke(this);
             }
         }
 

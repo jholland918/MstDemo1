@@ -25,12 +25,12 @@ namespace Assets.App.Scripts.Lobbies
             var properties = options.ToDictionary();
 
             // Create the teams
-            var teamA = new LobbyTeam("Team Blue")
+            var teamA = new LobbyTeam("A")
             {
                 MaxPlayers = 1,
                 MinPlayers = 1
             };
-            var teamB = new LobbyTeam("Team Red")
+            var teamB = new LobbyTeam("B")
             {
                 MaxPlayers = 1,
                 MinPlayers = 1
