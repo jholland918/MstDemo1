@@ -143,7 +143,11 @@ namespace Assets.App.Scripts.UI
                     // Put player in room
                     Debug.Log("LobbyView:OnLobbyStateChange:GameInProgress");
                     _currentRoomAccess = null;
-                    _lobby.GetLobbyRoomAccess((access, error) =>
+
+                    var properties = new MstProperties();
+                    properties.Set(Mst.Args.Names.RoomOnlineScene, "MyScene");
+
+                    _lobby.GetLobbyRoomAccess(properties, (access, error) =>
                     {
                         Debug.Log("LobbyView:JoinedLobby:GetLobbyRoomAccess");
                         if (!string.IsNullOrWhiteSpace(error))
