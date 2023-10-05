@@ -1,5 +1,12 @@
 # Master Server Toolkit Demo
 
+## MST8 Room Scene Changes
+1.  Create a Room Prefab
+	*  Open Room Scene
+	*  Create empty game object named Room to be the root of the prefab
+	*  Drag everything except for the Arena object under the room prefab
+	*  Drag the root room object into the App/Prefabs folder to make it a prefab
+
 ## MST7 Game Types
 1.  Add /Assets/App/Scripts/Character/PlayerCharacterShoot.cs
 2.  Add /Assets/App/Scripts/Character/PredictedProjectile.cs
