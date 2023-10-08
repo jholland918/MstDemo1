@@ -144,10 +144,7 @@ namespace Assets.App.Scripts.UI
                     Debug.Log("LobbyView:OnLobbyStateChange:GameInProgress");
                     _currentRoomAccess = null;
 
-                    var properties = new MstProperties();
-                    properties.Set(Mst.Args.Names.RoomOnlineScene, "MyScene");
-
-                    _lobby.GetLobbyRoomAccess(properties, (access, error) =>
+                    _lobby.GetLobbyRoomAccess((access, error) =>
                     {
                         Debug.Log("LobbyView:JoinedLobby:GetLobbyRoomAccess");
                         if (!string.IsNullOrWhiteSpace(error))
@@ -272,13 +269,20 @@ namespace Assets.App.Scripts.UI
 
         public void OnStartGame()
         {
-            _lobby.StartGame((isSuccessful, error) =>
+            //TODO:JMH: Set properties.Set(Mst.Args.Names.RoomOnlineScene, "MuhScene");
+            _lobby.SetLobbyProperty(Mst.Args.Names.RoomOnlineScene, "RoomFoo", (isSuccessful, error) => 
             {
-                if (!isSuccessful)
+                //TODO: CHECK isSuccessful, error before starting game...
+                _lobby.StartGame((isSuccessful, error) =>
                 {
-                    Debug.LogError($"Lobby Start Game Error: {error}");
-                }
+                    if (!isSuccessful)
+                    {
+                        Debug.LogError($"Lobby Start Game Error: {error}");
+                    }
+                });
             });
+
+
         }
 
         private void OnMemberJoined(LobbyMemberData member)

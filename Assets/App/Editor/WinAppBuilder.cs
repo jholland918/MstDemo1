@@ -38,7 +38,9 @@ namespace Assets.App.Editor
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = new[] {
-                    "Assets/App/Scenes/Room/Room.unity"
+                    "Assets/App/Scenes/Room/Room.unity",
+                    "Assets/App/Scenes/Room/RoomFoo.unity",
+                    "Assets/App/Scenes/Room/RoomQux.unity"
                 },
                 locationPathName = Path.Combine(buildFolder, "Room.exe"),
                 target = BuildTarget.StandaloneWindows64,
@@ -177,7 +179,9 @@ namespace Assets.App.Editor
             {
                 scenes = new[] {
                     "Assets/App/Scenes/Client/Client.unity",
-                    "Assets/App/Scenes/Room/Room.unity"
+                    "Assets/App/Scenes/Room/Room.unity",
+                    "Assets/App/Scenes/Room/RoomFoo.unity",
+                    "Assets/App/Scenes/Room/RoomQux.unity"
                 },
                 locationPathName = Path.Combine(buildFolder, "Client.exe"),
                 target = BuildTarget.StandaloneWindows64,

@@ -1,11 +1,26 @@
 # Master Server Toolkit Demo
 
 ## MST8 Room Scene Changes
-1.  Create a Room Prefab
-	*  Open Room Scene
-	*  Create empty game object named Room to be the root of the prefab
-	*  Drag everything except for the Arena object under the room prefab
-	*  Drag the root room object into the App/Prefabs folder to make it a prefab
+0.  Create a Room folder inside Assets/App/Prefabs
+1.  Create several prefabs by dropping them inside the new folder: App/Prefabs/Room
+    *  MasterCanvas/RoomHudView
+    *  MasterCanvas
+	*  --PLAYER_SPAWNER
+	*  --ROOM_CLIENT
+	*  --CONNECTION_TO_MASTER
+	*  --GAME_MANAGER
+	*  Main Camera
+	*  Directional Light
+	*  EventSystem
+3.  Create a new Scene in App/Scenes/Room and name it RoomFoo
+    *  Remove the existing Main Camera and Directional Light objects from the new scene
+	*  Add all prefabs (except RoomHudView) in Prefabs/Room to the new scene
+	*  Add --ROOM_SERVER from App/Prefabs to the new scene
+	*  ...
+    *  ...at some point add call to _lobby.SetLobbyProperty(Mst.Args.Names.RoomOnlineScene, "RoomFoo", (isSuccessful, error) => ...) in LobbyView.cs
+	*  ...
+4.  Add new scenes to build in App/Editor/WinAppBuilder.cs
+
 
 ## MST7 Game Types
 1.  Add /Assets/App/Scripts/Character/PlayerCharacterShoot.cs
