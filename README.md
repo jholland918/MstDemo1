@@ -1,6 +1,32 @@
 # Master Server Toolkit Demo
 
 ## MST8 Room Scene Changes
+### Persisted/Destroyed Objects when room loads
+
+*  Persisted GameObjects
+    *  --ROOM_CLIENT
+    *  --CONNECTION_TO_MASTER
+    *  --ROOM_SERVER
+*  Persisted Objects
+    *  RoomClientManager
+    *  ClientToMasterConnector
+    *  RoomNetworkManager
+    *  RoomServerManager
+*  Destroyed GameObjects:
+    *  Main Camera
+    *  Directional Light
+    *  MasterCanvas
+    *  --TERMINAL
+    *  EventSystem
+    *  --PLAYER_SPAWNER
+    *  --GAME_MANAGER
+    *  Arena
+*  Destroyed Objects:
+    *  Terminal
+    *  PlayerSpawner
+    *  GameManager
+
+### Steps for implementing room scene changes
 0.  Create a Room folder inside Assets/App/Prefabs
 1.  Create several prefabs by dropping them inside the new folder: App/Prefabs/Room
     *  MasterCanvas/RoomHudView
@@ -20,6 +46,8 @@
     *  ...at some point add call to _lobby.SetLobbyProperty(Mst.Args.Names.RoomOnlineScene, "RoomFoo", (isSuccessful, error) => ...) in LobbyView.cs
 	*  ...
 4.  Add new scenes to build in App/Editor/WinAppBuilder.cs
+----
+
 
 
 ## MST7 Game Types
