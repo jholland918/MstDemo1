@@ -21,12 +21,15 @@ namespace Assets.App.Scripts.GameManagement
         private RoomController _roomController;
         public LobbyDataPacket LobbyInfo { get; private set; }
         private bool _isTeamGame;
+        private RoomServerManager _roomServerManager;
         private BaseGameHandler _gameHandler;
         private RoomOptions _roomOptions;
 
         private void Awake()
         {
             Debug.Log("GameManager:Awake");
+
+            OnFoundRoomServerManager(FindFirstObjectByType<RoomServerManager>());
 
             _gameHandler = new BaseGameHandler(this);
 
@@ -109,15 +112,16 @@ namespace Assets.App.Scripts.GameManagement
             _roomController.Connection.Close();
         }
 
-        public void RoomServerManager_OnBeforeRoomRegister(RoomOptions roomOptions)
+        private void OnFoundRoomServerManager(RoomServerManager roomServerManager)
         {
-            _roomOptions = roomOptions;
-        }
+            Debug.Log("GameManager:OnFoundRoomServerManager");
+            _roomServerManager = roomServerManager;
+            _roomServerManager.OnPlayerJoinedRoomEvent.AddListener(RoomServerManager_OnPlayerJoinedRoom);
+            _roomServerManager.OnPlayerLeftRoomEvent.AddListener(RoomServerManager_OnPlayerLeftRoom);
+            _roomOptions = _roomServerManager.RoomOptions;
+            _roomController = _roomServerManager.RoomController;
 
-        public void RoomServerManager_OnRoomRegistered(RoomController roomController)
-        {
-            Debug.Log("GameManager:RoomServerManager_OnRoomRegistered");
-            _roomController = roomController;
+            PlayerRegistrations.Add(_roomServerManager.Players);
 
             Mst.Server.Lobbies.GetLobbyInfo(Mst.Args.LobbyId, (info, error) =>
             {

@@ -1,54 +1,50 @@
 using Assets.App.Scripts.Character;
 using MasterServerToolkit.MasterServer;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Assets.App.Scripts.GameManagement
 {
-    public class PlayerRegistrationCollection : IEnumerable<PlayerRegistration>
+    public class PlayerRegistrationCollection
     {
-        private readonly Dictionary<string, PlayerRegistration> _players = new Dictionary<string, PlayerRegistration>();
-        private readonly Dictionary<int, string> _ids = new();
+        public readonly List<RoomPlayer> RoomPlayers = new();
+        public readonly List<PlayerCharacter> Characters = new();
+        public readonly List<LobbyMemberData> LobbyMembers = new();
 
-        // Calls to this Add() method happen first
         public void Add(LobbyMemberData lobbyMember)
         {
             Debug.Log($"Add:LobbyMemberData:Username[{lobbyMember.Username}]");
-            _players.Add(lobbyMember.Username, new PlayerRegistration
+            if (!LobbyMembers.Contains(lobbyMember))
             {
-                LobbyMemberData = lobbyMember,
-            });
+                LobbyMembers.Add(lobbyMember);
+            }
         }
 
-        // Calls to this Add() method happen second
+        public void Add(IEnumerable<RoomPlayer> roomPlayers)
+        {
+            foreach(RoomPlayer roomPlayer in roomPlayers)
+            {
+                Add(roomPlayer);
+            }
+        }
+
         public void Add(RoomPlayer roomPlayer)
         {
             Debug.Log($"Add:RoomPlayer: RoomPeerId[{roomPlayer.RoomPeerId}] Username[{roomPlayer.Username}]");
-
-            // This happens before `Add(PlayerCharacter character)`, so we don't need to call ContainsKey() - Just Add()
-            _ids.Add(roomPlayer.RoomPeerId, roomPlayer.Username);
-
-            // An entry should have already been created for this username by `Add(LobbyMemberData lobbyMember)`
-            var player = _players[roomPlayer.Username];
-            player.RoomPlayer = roomPlayer;
+            if (!RoomPlayers.Contains(roomPlayer))
+            {
+                RoomPlayers.Add(roomPlayer);
+            }
         }
 
-        // Calls to this Add() method happen third
         public void Add(PlayerCharacter character)
         {
-            Debug.Log($"Add:PlayerCharacter: OwnerId[{character.NetworkObject.OwnerId}]");
-            
-            // An ID should have already been added by `Add(RoomPlayer roomPlayer)`
-            string username = _ids[character.NetworkObject.OwnerId];
-
-            Debug.Log($"Add:PlayerCharacter: Found Username[{username}]");
-
-            // This player registration should have already been added in `Add(LobbyMemberData lobbyMember)`
-            var player = _players[username];
-            player.PlayerCharacter = character;
+            Debug.Log($"Add:PlayerCharacter: OwnerId[{character.OwnerId}]");
+            if (!Characters.Contains(character))
+            {
+                Characters.Add(character);
+            }
         }
 
         public void Remove(RoomPlayer roomPlayer)
@@ -66,14 +62,21 @@ namespace Assets.App.Scripts.GameManagement
             //player.PlayerCharacter = null;
         }
 
-        public IEnumerator<PlayerRegistration> GetEnumerator()
+        internal string GetTeam(PlayerCharacter character)
         {
-            return _players.Values.GetEnumerator();
-        }
+            var roomPlayer = RoomPlayers.SingleOrDefault(rp => rp.RoomPeerId == character.OwnerId);
+            if (roomPlayer == null)
+            {
+                return null;
+            }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _players.Values.GetEnumerator();
+            var lobbyMember = LobbyMembers.SingleOrDefault(lm => lm.Username == roomPlayer.Username);
+            if (lobbyMember == null)
+            {
+                return null;
+            }
+
+            return lobbyMember.Team;
         }
     }
 }

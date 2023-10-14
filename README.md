@@ -1,5 +1,76 @@
 # Master Server Toolkit Demo
 
+## MST8 Room Scene Changes
+### Persisted/Destroyed Objects when room loads
+
+*  Persisted GameObjects
+    *  --ROOM_CLIENT
+    *  --CONNECTION_TO_MASTER
+    *  --ROOM_SERVER
+*  Persisted Objects
+    *  RoomClientManager
+    *  ClientToMasterConnector
+    *  RoomNetworkManager
+    *  RoomServerManager
+*  Destroyed GameObjects:
+    *  Main Camera
+    *  Directional Light
+    *  MasterCanvas
+    *  --TERMINAL
+    *  EventSystem
+    *  --PLAYER_SPAWNER
+    *  --GAME_MANAGER
+    *  Arena
+*  Destroyed Objects:
+    *  Terminal
+    *  PlayerSpawner
+    *  GameManager
+
+### Steps for implementing room scene changes
+0.  Create a Room folder inside Assets/App/Prefabs
+1.  Create several prefabs by dropping them inside the new folder: App/Prefabs/Room
+	*  Main Camera
+	*  Directional Light
+	*  EventSystem
+    *  MasterCanvas/RoomHudView
+    *  MasterCanvas
+	*  --PLAYER_SPAWNER
+	*  --GAME_MANAGER
+    *  --TERMINAL
+2.  Duplicate Room scene and rename new scene as RoomFoo
+3.  In Room scene, delete all objects from hierarchy except for
+    *  --CONNECTION_TO_MASTER
+    *  --ROOM_SERVER
+    *  --ROOM_CLIENT
+4.  In Room scene, remove old, invalid RoomServerManager event handlers that used to belong to the GameManager.
+5.  In RoomFoo scene, delete the following objects from hierarchy:
+    *  --CONNECTION_TO_MASTER
+    *  --ROOM_SERVER
+    *  --ROOM_CLIENT
+6.  Edit GameManager to fix event listeners:
+    *  In Awake(), add _roomServerManager = FindFirstObjectByType<RoomServerManager>();
+	*  For handlers RoomServerManager_OnPlayerJoinedRoom & RoomServerManager_OnPlayerLeftRoom
+	   *  Manually add listeners: 
+	      *  _roomServerManager.OnPlayerJoinedRoomEvent.AddListener(RoomServerManager_OnPlayerJoinedRoom);
+		  *  _roomServerManager.OnPlayerLeftRoomEvent.AddListener(RoomServerManager_OnPlayerLeftRoom);
+    *  For handler RoomServerManager_OnBeforeRoomRegister
+	   *  Delete hander and just assign _roomOptions = _roomServerManager.RoomOptions;
+    *  For handler RoomServerManager_OnRoomRegistered
+	   *  Assign _roomController = _roomServerManager.RoomController;
+	   *  Rename handler to OnFoundRoomServerManager() and call it from Awake(), put all that extra wire up logic inside it.
+    *  Update PlayerRegistrationCollection logic and affected game handlers...
+7.  Add new RoomFoo scene to build in App/Editor/WinAppBuilder.cs
+8.  Add call to _lobby.SetLobbyProperty(Mst.Args.Names.RoomOnlineScene, "RoomFoo", (isSuccessful, error) => ...) in LobbyView.cs - Then test it!
+9.  Create a new RoomQux scene from scratch
+    *  Add the same prefabs as RoomFoo
+	*  Add tje game manager reference to the RoomHudView object
+	*  Add a floor and a couple of boxes or whatever for an arena
+	*  Add RoomQux to the WinAppBuilder.cs and LobbyView.cs, then test it!
+10.  Add room/level select dropdown in LobbyView.
+11.  TODO: BUG: Figure out why the subsequent game can't be started.
+
+
+
 ## MST7 Game Types
 1.  Add /Assets/App/Scripts/Character/PlayerCharacterShoot.cs
 2.  Add /Assets/App/Scripts/Character/PredictedProjectile.cs

@@ -20,15 +20,15 @@ namespace Assets.App.Scripts.GameManagement
         public override void OnCharacterDie(PlayerCharacterVitals characterVitals)
         {
             _log.Debug("*** OnCharacterDie ***");
-            _deadCharacters.Add(characterVitals.NetworkObject.OwnerId);
+            _deadCharacters.Add(characterVitals.OwnerId);
 
-            var aliveCharacters = PlayerRegistrations.Where(p =>!_deadCharacters.Contains(p.OwnerId));
+            var aliveCharacters = PlayerRegistrations.Characters.Where(p => !_deadCharacters.Contains(p.OwnerId));
 
             if (aliveCharacters.Count() == 1)
             {
                 Dictionary<int, string> playerResults = new();
 
-                foreach (var p in PlayerRegistrations)
+                foreach (var p in PlayerRegistrations.Characters)
                 {
                     bool isWinner = aliveCharacters.Any(a => a.OwnerId == p.OwnerId);
                     playerResults.Add(p.OwnerId, (isWinner ? "You Won!" : "You Lost!"));
