@@ -30,6 +30,8 @@ namespace Assets.App.Scripts.UI
         private TMP_Text statusInfoText;
         [SerializeField]
         private UIButton changeTeamButton;
+        [SerializeField]
+        private TMP_Dropdown stageDropdown;
 
         [SerializeField]
         private UnityEngine.UI.Button startGameButton;
@@ -39,6 +41,14 @@ namespace Assets.App.Scripts.UI
         public UnityEvent OnStartGameEvent;
         private RoomAccessPacket _currentRoomAccess;
         private bool _isTeamGame;
+
+        private string StageName
+        {
+            get
+            {
+                return stageDropdown != null && stageDropdown.options.Count > 0 ? stageDropdown.options[stageDropdown.value].text : string.Empty;
+            }
+        }
 
         protected override void Awake()
         {
@@ -104,6 +114,7 @@ namespace Assets.App.Scripts.UI
 
             bool isMasterUser = _lobby.IsMasterUser(Mst.Client.Auth.AccountInfo.Username);
             startGameButton.gameObject.SetActive(isMasterUser);
+            stageDropdown.gameObject.SetActive(isMasterUser);
 
             Show();
         }
@@ -269,8 +280,8 @@ namespace Assets.App.Scripts.UI
 
         public void OnStartGame()
         {
-            //TODO:JMH: Set properties.Set(Mst.Args.Names.RoomOnlineScene, "MuhScene");
-            _lobby.SetLobbyProperty(Mst.Args.Names.RoomOnlineScene, "RoomQux", (isSuccessful, error) => 
+            Debug.Log($"Starting game with StageName: [{StageName}]");
+            _lobby.SetLobbyProperty(Mst.Args.Names.RoomOnlineScene, StageName, (isSuccessful, error) => 
             {
                 //TODO: CHECK isSuccessful, error before starting game...
                 _lobby.StartGame((isSuccessful, error) =>
@@ -281,8 +292,6 @@ namespace Assets.App.Scripts.UI
                     }
                 });
             });
-
-
         }
 
         private void OnMemberJoined(LobbyMemberData member)

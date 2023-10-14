@@ -66,7 +66,8 @@
 	*  Add tje game manager reference to the RoomHudView object
 	*  Add a floor and a couple of boxes or whatever for an arena
 	*  Add RoomQux to the WinAppBuilder.cs and LobbyView.cs, then test it!
-10.  Add room/level select dropdown in LobbyView...
+10.  Add room/level select dropdown in LobbyView.
+11.  TODO: BUG: Figure out why the subsequent game can't be started.
 
 
 
