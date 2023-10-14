@@ -25,25 +25,26 @@ namespace Assets.App.Scripts.GameManagement
             // Get the body counts!
             Dictionary<string, int> dead = new();
             Dictionary<string, int> alive = new();
-            foreach (var p in PlayerRegistrations)
+            foreach (var p in PlayerRegistrations.Characters)
             {
-                if (!dead.ContainsKey(p.Team))
+                string team = PlayerRegistrations.GetTeam(p);
+                if (!dead.ContainsKey(team))
                 {
-                    dead.Add(p.Team, 0);
+                    dead.Add(team, 0);
                 }
 
-                if (!alive.ContainsKey(p.Team))
+                if (!alive.ContainsKey(team))
                 {
-                    alive.Add(p.Team, 0);
+                    alive.Add(team, 0);
                 }
 
                 if (_deadCharacters.Contains(p.OwnerId))
                 {
-                    dead[p.Team] += 1;
+                    dead[team] += 1;
                 }
                 else
                 {
-                    alive[p.Team] += 1;
+                    alive[team] += 1;
                 }
             }
 
@@ -51,7 +52,7 @@ namespace Assets.App.Scripts.GameManagement
             {
                 // Everyone is dead
                 Dictionary<int, string> playerResults = new();
-                foreach (var p in PlayerRegistrations)
+                foreach (var p in PlayerRegistrations.Characters)
                 {
                     playerResults.Add(p.OwnerId, "Draw!");
                 }
@@ -66,9 +67,10 @@ namespace Assets.App.Scripts.GameManagement
                 // Only one team is left alive
                 string winningTeam = alive.Single(a => a.Value > 0).Key;
                 Dictionary<int, string> playerResults = new();
-                foreach (var p in PlayerRegistrations)
+                foreach (var p in PlayerRegistrations.Characters)
                 {
-                    string resultMessage = p.Team.Equals(winningTeam) ? "Your team won!" : "Your team lost!";
+                    string team = PlayerRegistrations.GetTeam(p);
+                    string resultMessage = team.Equals(winningTeam) ? "Your team won!" : "Your team lost!";
                     playerResults.Add(p.OwnerId, resultMessage);
                 }
 

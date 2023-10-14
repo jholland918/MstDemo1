@@ -29,15 +29,38 @@
 ### Steps for implementing room scene changes
 0.  Create a Room folder inside Assets/App/Prefabs
 1.  Create several prefabs by dropping them inside the new folder: App/Prefabs/Room
-    *  MasterCanvas/RoomHudView
-    *  MasterCanvas
-	*  --PLAYER_SPAWNER
-	*  --ROOM_CLIENT
-	*  --CONNECTION_TO_MASTER
-	*  --GAME_MANAGER
 	*  Main Camera
 	*  Directional Light
 	*  EventSystem
+    *  MasterCanvas/RoomHudView
+    *  MasterCanvas
+	*  --PLAYER_SPAWNER
+	*  --GAME_MANAGER
+    *  --TERMINAL
+2.  Duplicate Room scene and rename new scene as RoomFoo
+3.  In Room scene, delete all objects from hierarchy except for
+    *  --CONNECTION_TO_MASTER
+    *  --ROOM_SERVER
+    *  --ROOM_CLIENT
+4.  In Room scene, remove old, invalid RoomServerManager event handlers that used to belong to the GameManager.
+5.  In RoomFoo scene, delete the following objects from hierarchy:
+    *  --CONNECTION_TO_MASTER
+    *  --ROOM_SERVER
+    *  --ROOM_CLIENT
+6.  Edit GameManager to fix event listeners:
+    *  In Awake(), add _roomServerManager = FindFirstObjectByType<RoomServerManager>();
+	*  For handlers RoomServerManager_OnPlayerJoinedRoom & RoomServerManager_OnPlayerLeftRoom
+	   *  Manually add listeners: 
+	      *  _roomServerManager.OnPlayerJoinedRoomEvent.AddListener(RoomServerManager_OnPlayerJoinedRoom);
+		  *  _roomServerManager.OnPlayerLeftRoomEvent.AddListener(RoomServerManager_OnPlayerLeftRoom);
+    *  For handler RoomServerManager_OnBeforeRoomRegister
+	   *  Delete hander and just assign _roomOptions = _roomServerManager.RoomOptions;
+    *  For handler RoomServerManager_OnRoomRegistered
+	   *  Assign _roomController = _roomServerManager.RoomController;
+	   *  Rename handler to OnFoundRoomServerManager() and call it from Awake(), put all that extra wire up logic inside it.
+    *  Update PlayerRegistrationCollection logic and affected game handlers...
+----------------------------
+
 3.  Create a new Scene in App/Scenes/Room and name it RoomFoo
     *  Remove the existing Main Camera and Directional Light objects from the new scene
 	*  Add all prefabs (except RoomHudView) in Prefabs/Room to the new scene
