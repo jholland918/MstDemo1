@@ -270,7 +270,7 @@ namespace Assets.App.Scripts.UI
         public void OnStartGame()
         {
             //TODO:JMH: Set properties.Set(Mst.Args.Names.RoomOnlineScene, "MuhScene");
-            _lobby.SetLobbyProperty(Mst.Args.Names.RoomOnlineScene, "RoomFoo", (isSuccessful, error) => 
+            _lobby.SetLobbyProperty(Mst.Args.Names.RoomOnlineScene, "RoomQux", (isSuccessful, error) => 
             {
                 //TODO: CHECK isSuccessful, error before starting game...
                 _lobby.StartGame((isSuccessful, error) =>

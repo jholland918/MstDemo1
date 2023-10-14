@@ -59,17 +59,14 @@
 	   *  Assign _roomController = _roomServerManager.RoomController;
 	   *  Rename handler to OnFoundRoomServerManager() and call it from Awake(), put all that extra wire up logic inside it.
     *  Update PlayerRegistrationCollection logic and affected game handlers...
-----------------------------
-
-3.  Create a new Scene in App/Scenes/Room and name it RoomFoo
-    *  Remove the existing Main Camera and Directional Light objects from the new scene
-	*  Add all prefabs (except RoomHudView) in Prefabs/Room to the new scene
-	*  Add --ROOM_SERVER from App/Prefabs to the new scene
-	*  ...
-    *  ...at some point add call to _lobby.SetLobbyProperty(Mst.Args.Names.RoomOnlineScene, "RoomFoo", (isSuccessful, error) => ...) in LobbyView.cs
-	*  ...
-4.  Add new scenes to build in App/Editor/WinAppBuilder.cs
-----
+7.  Add new RoomFoo scene to build in App/Editor/WinAppBuilder.cs
+8.  Add call to _lobby.SetLobbyProperty(Mst.Args.Names.RoomOnlineScene, "RoomFoo", (isSuccessful, error) => ...) in LobbyView.cs - Then test it!
+9.  Create a new RoomQux scene from scratch
+    *  Add the same prefabs as RoomFoo
+	*  Add tje game manager reference to the RoomHudView object
+	*  Add a floor and a couple of boxes or whatever for an arena
+	*  Add RoomQux to the WinAppBuilder.cs and LobbyView.cs, then test it!
+10.  Add room/level select dropdown in LobbyView...
 
 
 
