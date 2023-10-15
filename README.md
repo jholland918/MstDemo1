@@ -1,5 +1,16 @@
 # Master Server Toolkit Demo
 
+## MST9 Authorization/Authentication
+Docs: https://master-toolkit.com/en/demos/basic-authorization/
+1. Open Client Scene
+2. Under MasterCanvas, drag the following auth view prefabs into it:
+   * These prefabs are under \Assets\MasterServerToolkit\Bridges\Shared\Prefabs\UI :
+     * SignupView
+     * SigninView
+     * PasswordResetView
+     * PasswordResetCodeView
+     * EmailConfirmationView
+
 ## MST8 Room Scene Changes
 ### Persisted/Destroyed Objects when room loads
 
