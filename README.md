@@ -1,5 +1,40 @@
 # Master Server Toolkit Demo
 
+## MST9 Authorization/Authentication
+Docs: https://master-toolkit.com/en/demos/basic-authorization/
+1. Open Client Scene
+2. Under MasterCanvas, drag the following auth view prefabs into it:
+   * These prefabs are under \Assets\MasterServerToolkit\Bridges\Shared\Prefabs\UI :
+     * SignupView
+     * SigninView
+     * PasswordResetView
+     * PasswordResetCodeView
+     * EmailConfirmationView
+3. Remove SimpleSignInView from MasterCanvas
+4. Wire stuff up in the hierarchy in Client scene
+	*  Drag `--CONNECTION_TO_MASTER` to `--CLIENT_MANAGER > Auth Behavior > Client To Master Connector`
+	*  Drag `MenuView` to `--CLIENT_MANAGER > Auth Behavior > On Email Confirmed Event` and assign UIView.Show as the handler.
+5. Setup email
+	*  Open Master scene, go to `--MASTER_SERVER > Mailers > BaseSmtp` game object and configure Smtp Mailer component:
+	    *  Sign up with an email service (brevo.com).
+		*  Go to Brevo > Transactional > Email > Real time
+		*  Use the Brevo SMTP server, port, login, and password in the Smtp Mailer component settings
+6.  Handle successful EmailConfirmationView event
+	*  When the email confirmation is successfull it'll simply hide the view. To make sure the user is not staring at a blank screen, add a handler to `Client Scene/MasterCanvas/EmailConfirmationView/Email Confirmation View component:On Hide Event`. Drag the MenuView from the hierarchy to the On Hide Event and select UIView.Show as the handler.
+7.  Secure SMTP passwords
+    *  In Master scene, select BaseSmtp in the hierarchy and reset the Smtp Mailer component
+	*  Add back the Email Body Template of `EmailMessageForm` to the Smtp Mailer component and maybe the Sender Display Name as well.
+	*  Update build scripts (`WinAppBuilder.cs` etc.) to create configs with the following settings:
+```
+// Email/Smtp Options
+properties.Add(Mst.Args.Names.SmtpHost, Environment.GetEnvironmentVariable("MST_SMTP_HOST", EnvironmentVariableTarget.User));
+properties.Add(Mst.Args.Names.SmtpUsername, Environment.GetEnvironmentVariable("MST_SMTP_USERNAME", EnvironmentVariableTarget.User));
+properties.Add(Mst.Args.Names.SmtpPassword, Environment.GetEnvironmentVariable("MST_SMTP_PASSWORD", EnvironmentVariableTarget.User));
+properties.Add(Mst.Args.Names.SmtpPort, Environment.GetEnvironmentVariable("MST_SMTP_PORT", EnvironmentVariableTarget.User));
+properties.Add(Mst.Args.Names.SmtpMailFrom, Environment.GetEnvironmentVariable("MST_SMTP_MAIL_FROM", EnvironmentVariableTarget.User));
+properties.Add(Mst.Args.Names.SmtpSenderDisplayName, Environment.GetEnvironmentVariable("MST_SMTP_SENDER_DISPLAY_NAME", EnvironmentVariableTarget.User));
+```
+
 ## MST8 Room Scene Changes
 ### Persisted/Destroyed Objects when room loads
 
