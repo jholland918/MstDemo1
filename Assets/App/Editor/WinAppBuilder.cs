@@ -1,5 +1,6 @@
 ﻿using MasterServerToolkit.MasterServer;
 using MasterServerToolkit.Utils.Editor;
+using System;
 using System.IO;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
@@ -110,6 +111,14 @@ namespace Assets.App.Editor
                 properties.Add(Mst.Args.Names.RoomExecutablePath, roomExePath);
                 properties.Add(Mst.Args.Names.RoomIp, Mst.Args.RoomIp);
                 properties.Add(Mst.Args.Names.RoomRegion, Mst.Args.RoomRegion);
+
+                // Email/Smtp Options
+                properties.Add(Mst.Args.Names.SmtpHost, Environment.GetEnvironmentVariable("MST_SMTP_HOST", EnvironmentVariableTarget.User));
+                properties.Add(Mst.Args.Names.SmtpUsername, Environment.GetEnvironmentVariable("MST_SMTP_USERNAME", EnvironmentVariableTarget.User));
+                properties.Add(Mst.Args.Names.SmtpPassword, Environment.GetEnvironmentVariable("MST_SMTP_PASSWORD", EnvironmentVariableTarget.User));
+                properties.Add(Mst.Args.Names.SmtpPort, Environment.GetEnvironmentVariable("MST_SMTP_PORT", EnvironmentVariableTarget.User));
+                properties.Add(Mst.Args.Names.SmtpMailFrom, Environment.GetEnvironmentVariable("MST_SMTP_MAIL_FROM", EnvironmentVariableTarget.User));
+                properties.Add(Mst.Args.Names.SmtpSenderDisplayName, Environment.GetEnvironmentVariable("MST_SMTP_SENDER_DISPLAY_NAME", EnvironmentVariableTarget.User));
 
                 File.WriteAllText(Path.Combine(buildFolder, "application.cfg"), properties.ToReadableString("\n", "="));
 
