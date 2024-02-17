@@ -1,5 +1,36 @@
 # Master Server Toolkit Demo
 
+## MST10 Sandboxes
+
+This is how to bypass MST during development to jump right into multiplayer development testing/debugging.
+In other words, no more loading MST, creating a game, hosting a lobby, joining a lobby etc. time consuming repetetiveness.
+
+The idea is to do a few things:
+1. Use ParrelSync to clone the Unity project so it can be run in multiple Unity editors at once so we can avoid waiting for the game to build each time.
+2. Allow one Unity editor to run as both Client and Game Server, while the other Unity editors will run as clients and auto-join the Editor running as the game server.
+
+Steps:
+1. Install ParrelSync
+2. Observe that in Assets\App\Editor\WinAppBuilder.cs, we have two methods we're interested in:
+   * `BuildRoomForWindows(bool isHeadless)` - This is our game server build
+   * `BuildClientForWindows()` - This is our game client
+3. The above build methods include the following scenes
+```csharp
+	scenes = new[] {
+		"Assets/App/Scenes/Client/Client.unity", // Only in the client...
+		"Assets/App/Scenes/Room/Room.unity",     // This contains common things needed for both client and server
+		"Assets/App/Scenes/Room/RoomFoo.unity",  // This is just for loading a game level aka multiplayer map
+		"Assets/App/Scenes/Room/RoomQux.unity",  // This is just for loading a game level aka multiplayer map
+	},
+```
+4. The `BuildRoomForWindows()` method includes these additional properties
+   * properties.Add(Mst.Args.Names.RoomIp, Mst.Args.RoomIp);
+   * roperties.Add(Mst.Args.Names.RoomPort, Mst.Args.RoomPort);
+5. Now that we know the differences in the builds, we need to configure them for our development sandbox....
+   * Q How do we do that??!! 
+   * A I don't know :(
+6. 
+
 ## MST9 Authorization/Authentication
 Docs: https://master-toolkit.com/en/demos/basic-authorization/
 1. Open Client Scene
